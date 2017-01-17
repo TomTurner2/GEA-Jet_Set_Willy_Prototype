@@ -8,7 +8,6 @@ public class PlayerControl : MonoBehaviour
     private LayerMask jumpable = 0;
     private Rigidbody2D myRB = null;
     private CircleCollider2D myCollider = null;
-    private bool grounded = true;
 
     [Tooltip("Players movement speed")]
     public float speed = 6.0f;
@@ -32,12 +31,10 @@ public class PlayerControl : MonoBehaviour
     void FixedUpdate ()
     {
         float movement = Input.GetAxis("Horizontal");
-        if ((/*Input.GetButtonDown("Jump")||*/Input.GetButton("Jump")) && checkGrounded())
+        if ((Input.GetButton("Jump")) && checkGrounded())
         {
-            myRB.velocity = new Vector2(myRB.velocity.x + movement, jumpForce);//jump player using velocity
-            grounded = false;
+            myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
         }
-        
         
         if (checkGrounded())
         {
