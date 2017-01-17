@@ -18,3 +18,4 @@ D:\cw2-wiseman\GEA_Prototype\Jet Set Willy Prototype\Temp\bin\Debug\UnityEngine.
 D:\cw2-wiseman\GEA_Prototype\Jet Set Willy Prototype\Temp\bin\Debug\UnityEngine.Networking.xml
 D:\cw2-wiseman\GEA_Prototype\Jet Set Willy Prototype\obj\Debug\Assembly-CSharp.dll
 D:\cw2-wiseman\GEA_Prototype\Jet Set Willy Prototype\obj\Debug\Assembly-CSharp.pdb
+D:\cw2-wiseman\GEA_Prototype\Jet Set Willy Prototype\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
