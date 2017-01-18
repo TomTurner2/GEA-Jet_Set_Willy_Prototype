@@ -117,8 +117,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graphicObject: {fileID: 192522}
-  speed: 6
-  jumpForce: 6
+  speed: 5
+  jumpForce: 5
   jumpTolerance: 0.1
   flipBaseSpeed: 300
   jump: {fileID: 21300016, guid: 8717d910ed687b5429525f403e23125d, type: 3}
