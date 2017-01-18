@@ -3,7 +3,7 @@ using System.Collections;
 
 public class oneWayPlatform : MonoBehaviour {
     public BoxCollider2D platform;
-    public bool oneWay = false;
+    private bool oneWay = false;
 
 	// Use this for initialization
 	void Start () {
@@ -12,6 +12,7 @@ public class oneWayPlatform : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        //enable solid collider whenever bottom trigger isn't entered
         platform.enabled = !oneWay;
 	}
 
