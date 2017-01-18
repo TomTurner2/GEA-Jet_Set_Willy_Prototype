@@ -10,7 +10,8 @@ GameObject:
   - 4: {fileID: 483308}
   - 212: {fileID: 21283664}
   - 58: {fileID: 5844520}
-  m_Layer: 0
+  - 50: {fileID: 5065414}
+  m_Layer: 8
   m_Name: Rope Node
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,6 +30,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!50 &5065414
+Rigidbody2D:
+  serializedVersion: 2
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 173018}
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 2
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!58 &5844520
 CircleCollider2D:
   m_ObjectHideFlags: 1

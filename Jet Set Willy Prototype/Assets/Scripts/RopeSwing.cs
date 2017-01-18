@@ -6,18 +6,9 @@ public class RopeSwing : MonoBehaviour
     public Transform ropeEnd;
     public GameObject ropeSprite;
     [HideInInspector]
-    public List<Vector2> ropePoints;//exposed for future climbing feature
+    private List<Vector2> ropePoints = new List<Vector2>();
     public int nodeCount = 50;
     private int oldNodeCount = 0;
-
-
-    private void Update()
-    {
-        if(nodeCount != oldNodeCount)
-        {
-            generateRope();
-        }
-    }
 
 
     void Start ()
@@ -27,8 +18,7 @@ public class RopeSwing : MonoBehaviour
 
 
     /// <summary>
-    /// Creates a rope only if the node count allows it. Keeps track of node count for
-    /// regenereation checking.
+    /// Creates a rope only if the node count allows it. 
     /// </summary>
     void generateRope()
     {
