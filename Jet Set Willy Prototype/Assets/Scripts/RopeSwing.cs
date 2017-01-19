@@ -3,16 +3,25 @@ using System.Collections.Generic;
 
 public class RopeSwing : MonoBehaviour
 {
-    public Transform ropeEnd;
+    const float TEXTURE_SCALE_X_MULT = 5;
+    const float TEXTURE_SCALE_Y = 0.1f;
     public GameObject ropeSprite;
+    [Range(0.1f, 1)]
+    public float ropeWidth = 0.15f;
+    private LineRenderer ropeRender = null;
+    private float nodeDiameter = 0;
     [HideInInspector]
-    private List<Vector2> ropePoints = new List<Vector2>();
-    public int nodeCount = 50;
-    private int oldNodeCount = 0;
+    private List<GameObject> ropePoints = new List<GameObject>();//convert to game object and place nodes whilst calc
+    [Tooltip("Not actual length, is the amount of nodes distributed so is determined by prefabs diameter")]
+    public int ropeLength = 10;
+    //private int oldNodeCount = 0;
 
 
     void Start ()
     {
+        ropeRender = gameObject.GetComponent<LineRenderer>();
+        ropeRender.SetWidth(ropeWidth, ropeWidth);
+        nodeDiameter = ropeSprite.GetComponent<CircleCollider2D>().radius;
         generateRope();  
     }
 
@@ -22,50 +31,73 @@ public class RopeSwing : MonoBehaviour
     /// </summary>
     void generateRope()
     {
-        if (nodeCount > 0)
+        if (ropeLength > 1)
         {
             calculateNodePositions();
-            placeRopeNodes();
-            oldNodeCount = nodeCount;
+           // oldNodeCount = nodeCount;
         }
     }
 
+    private void Update()
+    {
+        if (ropeLength > 1)
+        {
+            ropeRender.SetPosition(0, transform.position);
+
+            for (int i = 1; i < ropePoints.Count; i ++)
+            {
+                ropeRender.SetPosition(i, ropePoints[i].transform.position);
+            }
+        }
+
+        //fix material stretch...kinda
+        float dist = Vector3.Distance(transform.position, ropePoints[ropePoints.Count - 1].transform.position);
+        ropeRender.material.mainTextureScale = new Vector2(dist * TEXTURE_SCALE_X_MULT, TEXTURE_SCALE_Y);
+    }
 
     /// <summary>
     /// Evenly distributes node between two points.
     /// </summary>
     void calculateNodePositions()
     {
-        float percentage = 1.0f / nodeCount;//percentage for distribution 
+        float percentage = 1.0f / ropeLength;//percentage for distribution 
+
+        Vector2 endPoint = new Vector2(transform.position.x, -(ropeLength * nodeDiameter));
+        Rigidbody2D lastPoint = GetComponent<Rigidbody2D>();  
+      
+       
+
         for (float i = 0; i <= 1; i += percentage)
         {
-            Vector2 point = Vector2.Lerp(transform.position, ropeEnd.position, i);//increment the percentage between the two points
-            ropePoints.Add(point);//add point to the list
-        }        
-    }
-
-
-    /// <summary>
-    /// Instantiates nodes at pre-calcualted points. Each sprite is
-    /// connected to the last using hinge joints.
-    /// </summary>
-    void placeRopeNodes()
-    {
-        Rigidbody2D lastPoint = GetComponent<Rigidbody2D>();
-        foreach (var ropePoint in ropePoints)
-        {
             GameObject rope = Instantiate(ropeSprite) as GameObject;//create rope node
-            rope.transform.position = ropePoint;
+            rope.transform.position = Vector2.Lerp(transform.localPosition, endPoint, i);
+            rope.transform.parent = this.transform;//add it as a child              
 
             Rigidbody2D pointRB = rope.GetComponent<Rigidbody2D>();
             if (lastPoint != pointRB)
             {
                 HingeJoint2D joint = rope.AddComponent<HingeJoint2D>();//create hinge joints between rope nodes
                 joint.connectedBody = lastPoint;
-                joint.enableCollision = false;                
+                joint.enableCollision = false;
             }
+
             lastPoint = pointRB;//next link target
-            rope.transform.parent = this.transform;//add it as a child
+            ropePoints.Add(rope);//add point to the list
         }
+        addNodesToRender(); 
+    }
+
+    void addNodesToRender()//could remove loop for optimisation
+    {
+        ropeRender.SetVertexCount(ropePoints.Count);
+        ropeRender.useWorldSpace = true;
+        int pos = 0;
+
+        for(int i = 0; i < ropePoints.Count; i++)
+        {
+            ropeRender.SetPosition(pos, ropePoints[i].transform.position);
+            pos++;
+        }
+        
     }
 }
