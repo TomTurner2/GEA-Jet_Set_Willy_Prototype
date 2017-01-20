@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-enum PlayerState
+public enum PlayerState
 {
     IDLE,
     SLIDING,
     JUMPING,
-    RUNNING
+    RUNNING,
+	DEAD
 }
 
 public class PlayerControl : MonoBehaviour
@@ -16,7 +17,7 @@ public class PlayerControl : MonoBehaviour
     private LayerMask jumpable = 0;
     private Rigidbody2D myRB = null;
     private CircleCollider2D myCollider = null;
-    private PlayerState myState = PlayerState.IDLE;
+    public PlayerState myState = PlayerState.IDLE;
     private BoxCollider2D topCollider = null;
     public GameObject graphicObject = null;
     private SpriteRenderer graphic = null;
@@ -63,7 +64,7 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate ()
     {
-        handleInput();
+		handleInput ();
         executeState();
     }
 
@@ -83,7 +84,7 @@ public class PlayerControl : MonoBehaviour
     {
         float movement = Input.GetAxis("Horizontal");
 
-        if (checkGrounded())
+		if (checkGrounded() && myState != PlayerState.DEAD)
         {
             setDirection(movement);//can only change direction on ground
             if(myRB.velocity.x > 1 || myRB.velocity.x < -1)
@@ -98,7 +99,7 @@ public class PlayerControl : MonoBehaviour
 
             
 
-            if ((Input.GetButton("Jump")) && checkGrounded())
+            if (Input.GetButton("Jump"))
             {
                 myState = PlayerState.JUMPING;
                 myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
@@ -132,10 +133,12 @@ public class PlayerControl : MonoBehaviour
             case PlayerState.RUNNING:
                 graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
                 graphic.sprite = run;
-                    break;
+                break;
             case PlayerState.SLIDING:
                 graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
                 break;
+			case PlayerState.DEAD:
+				break;
         }
 
         if(right)
@@ -164,4 +167,21 @@ public class PlayerControl : MonoBehaviour
 
         return false;
     }
+
+	//A Method to 'kill' the player, handling any values related to player death
+	public void kill()
+	{
+		myState = PlayerState.DEAD;
+	}
+
+	//On collision with enemy, player dies
+	/*
+	void OnTriggerEnter2D(Collider2D col)
+	{
+		if (col.gameObject.tag == "Enemy")
+		{
+			kill();
+		}
+	}
+	*/
 }

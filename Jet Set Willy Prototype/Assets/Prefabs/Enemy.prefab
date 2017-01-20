@@ -11,6 +11,7 @@ GameObject:
   - 212: {fileID: 21212048}
   - 114: {fileID: 11469022}
   - 114: {fileID: 11413970}
+  - 58: {fileID: 5833586}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -30,6 +31,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!58 &5833586
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165382}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.1
 --- !u!114 &11413970
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -41,6 +56,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529ae546b6a376e418f67c483c1e2a92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 5833586}
+  activated: 0
 --- !u!114 &11469022
 MonoBehaviour:
   m_ObjectHideFlags: 1
