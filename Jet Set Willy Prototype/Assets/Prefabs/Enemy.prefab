@@ -9,9 +9,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 484360}
   - 212: {fileID: 21212048}
-  - 114: {fileID: 11469022}
   - 114: {fileID: 11413970}
   - 58: {fileID: 5833586}
+  - 114: {fileID: 11476130}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -58,7 +58,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemy: {fileID: 5833586}
   activated: 0
---- !u!114 &11469022
+--- !u!114 &11476130
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 165382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf981060fb1a3064eb312a21b35a0e07, type: 3}
+  m_Script: {fileID: 11500000, guid: 454765f0fddd6ee49946cc6696ac8b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   wayPoints:

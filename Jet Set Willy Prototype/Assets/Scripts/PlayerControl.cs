@@ -173,15 +173,4 @@ public class PlayerControl : MonoBehaviour
 	{
 		myState = PlayerState.DEAD;
 	}
-
-	//On collision with enemy, player dies
-	/*
-	void OnTriggerEnter2D(Collider2D col)
-	{
-		if (col.gameObject.tag == "Enemy")
-		{
-			kill();
-		}
-	}
-	*/
 }
