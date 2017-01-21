@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public enum PlayerState
+enum PlayerState
 {
     IDLE,
     SLIDING,
@@ -17,14 +17,17 @@ public class PlayerControl : MonoBehaviour
     private LayerMask jumpable = 0;
     private Rigidbody2D myRB = null;
     private CircleCollider2D myCollider = null;
-    public PlayerState myState = PlayerState.IDLE;
+    private PlayerState myState = PlayerState.IDLE;
     private BoxCollider2D topCollider = null;
     public GameObject graphicObject = null;
     private SpriteRenderer graphic = null;
     private Transform graphicTransform = null;
     private bool right = true;
     private float flipVelocity = 1;
-    private bool finishedJump = false;
+    //private bool finishedJump = false;
+	public int score = 0;
+	public Transform respawnPoint = null;
+	public int lives = 8;
 
     [Tooltip("Players movement speed")]
     public float speed = 6.0f;
@@ -172,5 +175,14 @@ public class PlayerControl : MonoBehaviour
 	public void kill()
 	{
 		myState = PlayerState.DEAD;
+		lives--;
+		transform.position = respawnPoint.position;
+		graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+		myState = PlayerState.IDLE;
+	}
+
+	public void collect()
+	{
+		score++;
 	}
 }
