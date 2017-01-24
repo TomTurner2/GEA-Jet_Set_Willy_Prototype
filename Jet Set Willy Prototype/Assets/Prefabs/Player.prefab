@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 196522}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.02, y: -0.02, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 4.020498}
   m_Children:
   - {fileID: 411166}
   m_Father: {fileID: 0}
@@ -131,16 +131,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cce6e51b75e593145aea1a4d0fc00d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myState: 0
+  notJumpable:
+    serializedVersion: 2
+    m_Bits: 272
   graphicObject: {fileID: 192522}
+  score: 0
+  respawnPoint: {fileID: 0}
+  lives: 8
   speed: 5
+  maxSpeed: 5
+  runAnimDelay: 0.1
   jumpForce: 5
-  jumpTolerance: 0.1
+  wallJumpXForce: 5
+  jumpTolerance: 0.04
   flipBaseSpeed: 300
-  jump: {fileID: 21300016, guid: 8717d910ed687b5429525f403e23125d, type: 3}
-  run: {fileID: 21300002, guid: 8717d910ed687b5429525f403e23125d, type: 3}
-  idle: {fileID: 21300000, guid: 8717d910ed687b5429525f403e23125d, type: 3}
-  slide: {fileID: 21300006, guid: 8717d910ed687b5429525f403e23125d, type: 3}
+  normal:
+    jump: {fileID: 21300010, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
+    run:
+    - {fileID: 21300006, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
+    - {fileID: 21300002, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
+    - {fileID: 21300004, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
+    idle: {fileID: 21300000, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
+    slide: {fileID: 21300008, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
+    hang: {fileID: 21300012, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
 --- !u!212 &21271984
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -1,0 +1,212 @@
+fileFormatVersion: 2
+guid: 3a1e06ee20feee94388fe84c146e7c2d
+timeCreated: 1485257446
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Green_Idle
+    21300002: Green_Run_002
+    21300004: Green_Run_003
+    21300006: Green_Run_001
+    21300008: Green_Slide
+    21300010: Green_Jump
+    21300012: Green_Hang
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 0
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 300
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: Green_Idle
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 252
+        width: 169
+        height: 273
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 82.5, y: -114.5}
+        - {x: 84.5, y: -90.5}
+        - {x: 84.5, y: 116.5}
+        - {x: 67.5, y: 136.5}
+        - {x: -26.5, y: 136.5}
+        - {x: -47.5, y: 132.5}
+        - {x: -81.5, y: 67.5}
+        - {x: -82.5, y: 57.5}
+        - {x: -84.5, y: -4.5}
+        - {x: -84.5, y: -136.5}
+        - {x: -12.5, y: -136.5}
+        - {x: 24.5, y: -123.5}
+        - {x: 31.5, y: -131.5}
+        - {x: 78.5, y: -133.5}
+    - name: Green_Run_002
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 259
+        width: 169
+        height: 259
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 70.5, y: 129.5}
+        - {x: -39.5, y: 129.5}
+        - {x: -84.5, y: 75.5}
+        - {x: -84.5, y: 0.5}
+        - {x: -73.5, y: -49.5}
+        - {x: -27.5, y: -93.5}
+        - {x: -18.5, y: -129.5}
+        - {x: 79.5, y: -129.5}
+        - {x: 59.5, y: -84.5}
+        - {x: 84.5, y: -50.5}
+        - {x: 84.5, y: 100.5}
+    - name: Green_Run_003
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 266
+        width: 183
+        height: 252
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 77.5, y: 79}
+        - {x: 53.5, y: 120}
+        - {x: 49.5, y: 121}
+        - {x: -50.5, y: 121}
+        - {x: -91.5, y: 71}
+        - {x: -91.5, y: -121}
+        - {x: 87.5, y: -121}
+        - {x: 91.5, y: -103}
+        - {x: 91.5, y: -74}
+    - name: Green_Run_001
+      rect:
+        serializedVersion: 2
+        x: 694
+        y: 274
+        width: 196
+        height: 244
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 98, y: 40}
+        - {x: 83, y: 81}
+        - {x: 64, y: 122}
+        - {x: -44, y: 122}
+        - {x: -98, y: 55}
+        - {x: -98, y: -69}
+        - {x: -80, y: -118}
+        - {x: 84, y: -118}
+        - {x: 94, y: -77}
+        - {x: 90, y: -42}
+        - {x: 98, y: -18}
+    - name: Green_Slide
+      rect:
+        serializedVersion: 2
+        x: 967
+        y: 259
+        width: 210
+        height: 189
+      alignment: 9
+      pivot: {x: 0.5, y: 0.6}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 96, y: -22.399994}
+        - {x: 39, y: 75.600006}
+        - {x: -58, y: 75.600006}
+        - {x: -88, y: 53.600006}
+        - {x: -105, y: -4.399994}
+        - {x: -105, y: -113.399994}
+        - {x: 97, y: -113.399994}
+        - {x: 105, y: -102.399994}
+        - {x: 105, y: -68.399994}
+    - name: Green_Jump
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 35
+        width: 169
+        height: 154
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -37.5, y: 77}
+        - {x: -84.5, y: 44}
+        - {x: -84.5, y: -14}
+        - {x: -68.5, y: -56}
+        - {x: 9.5, y: -77}
+        - {x: 84.5, y: -77}
+        - {x: 84.5, y: 43}
+        - {x: 62.5, y: 77}
+    - name: Green_Hang
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 0
+        width: 183
+        height: 224
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 91.5, y: 87}
+        - {x: 73.5, y: 112}
+        - {x: -48.5, y: 112}
+        - {x: -91.5, y: 100}
+        - {x: -91.5, y: -112}
+        - {x: 27.5, y: -112}
+        - {x: 69.5, y: -94}
+        - {x: 87.5, y: -3}
+        - {x: 91.5, y: 21}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
