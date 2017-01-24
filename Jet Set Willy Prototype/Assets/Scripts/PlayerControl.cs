@@ -58,6 +58,10 @@ public class PlayerControl : MonoBehaviour
     [Tooltip("Distance between floor and player you can jump")]
     public float jumpTolerance = 0.1f;
     public float flipBaseSpeed = 300.0f;
+    public bool onLadder = false;
+    public float climbSpeed = 5.0f;
+    public float climbVelocity = 5.0f;
+    private float gravityStore = 0;
 
     public SpriteSet normal;  
 
@@ -71,7 +75,7 @@ public class PlayerControl : MonoBehaviour
         graphic.sprite = normal.idle;
         right = true;
         notJumpable = ~(notJumpable);
-        
+        gravityStore = myRB.gravityScale;
     }
 
 
@@ -162,6 +166,17 @@ public class PlayerControl : MonoBehaviour
 
         if(myState != PlayerState.SLIDING)
         myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
+
+        if (onLadder)
+        {
+            myRB.gravityScale = 0;
+            climbVelocity = climbSpeed * Input.GetAxisRaw("Vertical");
+            myRB.velocity = new Vector2(myRB.velocity.x, climbVelocity);
+        }
+        else if (!onLadder)
+        {
+            myRB.gravityScale = gravityStore;
+        }
     }
 
     void executeState()

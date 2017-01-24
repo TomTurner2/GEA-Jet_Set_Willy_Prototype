@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - OneWayPlat
+  - Tile
+  - Obstacle
+  - platform
   layers:
   - Default
   - TransparentFX
@@ -46,6 +49,6 @@ TagManager:
   - name: TerrainTiles
     uniqueID: 1713798529
     locked: 0
-  - name: New Layer
+  - name: Player
     uniqueID: 1736027605
     locked: 0

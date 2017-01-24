@@ -8,13 +8,11 @@ public class oneWayPlatform : MonoBehaviour {
     private bool dropDown = false;
 
 
-
 	// Use this for initialization
 	void Start () {
 	
 	}
 	
-
 
 	// Update is called once per frame
 	void Update ()
@@ -31,21 +29,19 @@ public class oneWayPlatform : MonoBehaviour {
         {
             dropDown = false;
         }
-        //if down key is pressed, player falls through
+
+        //if down key platform disabled
         if(dropDown == true)
         {
             oneWay = true;
         }
-
 	}
-
 
 
     void OnTriggerStay2D(Collider2D col)
     {
         oneWay = true;
     }
-
 
 
     void OnTriggerExit2D(Collider2D col)
