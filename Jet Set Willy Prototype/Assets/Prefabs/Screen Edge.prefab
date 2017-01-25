@@ -10,10 +10,10 @@ GameObject:
   - 4: {fileID: 452034}
   - 212: {fileID: 21203852}
   - 61: {fileID: 6134776}
-  - 114: {fileID: 11422272}
-  m_Layer: 0
+  - 114: {fileID: 11400284}
+  m_Layer: 8
   m_Name: Screen Edge
-  m_TagString: Untagged
+  m_TagString: Nonsolid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,8 +25,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 142642}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.92, y: 2, z: 0}
-  m_LocalScale: {x: 1, y: 5, z: 1}
+  m_LocalPosition: {x: 27.78, y: 2.29, z: 0}
+  m_LocalScale: {x: 0.24445018, y: 5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -44,7 +44,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
---- !u!114 &11422272
+--- !u!114 &11400284
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -52,13 +52,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 142642}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3dcfd22342e5cea44aeec0736e2c13fe, type: 3}
+  m_Script: {fileID: 11500000, guid: bf99ba26ebaa1e74eb1fd819ed5f2331, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mainCam: {fileID: 0}
-  direction: 108
-  sizeX: 10
-  sizeY: 10
+  player: {fileID: 0}
+  direction: 114
+  sizeX: 15
+  sizeY: 15
+  timeTakenDuringLerp: 1
 --- !u!212 &21203852
 SpriteRenderer:
   m_ObjectHideFlags: 1

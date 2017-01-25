@@ -45,6 +45,8 @@ public class PlayerControl : MonoBehaviour
 	public int lives = 8;
     public float slideSpeed = 6;
     private bool sameSlide = false;
+	public bool frozen = false;
+	private Vector2 storedVelocity;
 
     [Tooltip("Players movement speed")]
     public float speed = 5.0f;
@@ -74,11 +76,17 @@ public class PlayerControl : MonoBehaviour
         
     }
 
-
     void FixedUpdate ()
     {
-		handleInput ();
-        executeState();
+		if (!frozen)
+		{
+			handleInput ();
+			executeState ();
+		}
+		else
+		{
+
+		}
     }
 
     void setDirection(float xInput)
@@ -265,5 +273,24 @@ public class PlayerControl : MonoBehaviour
 	public void collect()
 	{
 		score++;
+	}
+
+	public void freeze(bool f)
+	{
+		frozen = f;
+		foreach (Collider2D col in GetComponents<Collider2D>())
+		{
+			col.enabled = !frozen;
+		}
+
+		if (frozen)
+		{
+			storedVelocity = myRB.velocity;
+			myRB.velocity = new Vector2(0,0);
+		}
+		else
+		{
+			myRB.velocity = storedVelocity;
+		}
 	}
 }

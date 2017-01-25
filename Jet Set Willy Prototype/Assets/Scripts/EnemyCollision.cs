@@ -18,7 +18,7 @@ public class EnemyCollision : MonoBehaviour
 	//Check collisions
 	void OnTriggerEnter2D(Collider2D col)
 	{
-		if (col.gameObject.tag == "Player")
+		if (col.gameObject.tag == "Player" && col is BoxCollider2D)
 		{
 			//Sends a message to player asking it to run the method 'kill'
 			col.gameObject.SendMessage("kill");
