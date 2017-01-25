@@ -108,7 +108,7 @@ public class PlayerControl : MonoBehaviour
         if (checkGrounded(-Vector3.up))
         {
             setDirection(movement);//can only change direction on ground
-            Debug.Log(myRB.velocity.x);
+     
             if (myRB.velocity.x > 1 || myRB.velocity.x < -1)
             {
                 myState = PlayerState.RUNNING;
