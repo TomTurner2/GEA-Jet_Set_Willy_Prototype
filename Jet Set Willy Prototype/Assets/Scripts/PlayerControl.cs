@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-enum PlayerState
+public enum PlayerState
 {
     IDLE,
     SLIDING,
     JUMPING,
     RUNNING,
 	DEAD,
-    HANG
+    HANG,
+    SWINGING,
+    CLIMBINGUP,
+    CLIMBINGDOWN
 }
 
 [System.Serializable]
@@ -25,7 +28,7 @@ public class SpriteSet
 public class PlayerControl : MonoBehaviour
 {
     const float REDUCE_CAST_RADIUS = 0.01f;
-    const float DEADZONE = 0.05f;
+    const float DEADZONE = 0.1f;
 
     public LayerMask notJumpable = 0;
     private Rigidbody2D myRB = null;
@@ -52,6 +55,7 @@ public class PlayerControl : MonoBehaviour
     [Tooltip("Players movement speed")]
     public float speed = 5.0f;
     public float maxSpeed = 5;
+    public float climbSpeed = 3;
     public float runAnimDelay = 0.1f;
     private int runFrame = 0;
     private float timer = 0;
@@ -99,81 +103,116 @@ public class PlayerControl : MonoBehaviour
 
     void setDirection(float xInput)
     {
-        if (xInput > DEADZONE)
+        if (myRB.velocity.x > DEADZONE)
         {
             right = true;
         }
-        else if (xInput < -DEADZONE)
+        else if (myRB.velocity.x < -DEADZONE)
         {
             right = false;
         }
+
+        
+    }
+
+    public PlayerState getPlayerState()
+    {
+        return myState;
+    }
+
+    public void setPlayerState(PlayerState state)
+    {
+        myState = state;
+    }
+
+    public float getClimbSpeed()
+    {
+        return climbSpeed;
     }
 
     void handleInput()
     {
         float movement = Input.GetAxis("Horizontal");
+        setDirection(movement);//can only change direction on ground
 
-        if (checkGrounded(-Vector3.up))
+        if (myState != PlayerState.SWINGING && myState != PlayerState.CLIMBINGUP && myState != PlayerState.CLIMBINGDOWN)
         {
-            setDirection(movement);//can only change direction on ground
-     
-            if (myRB.velocity.x > 1 || myRB.velocity.x < -1)
+            if (checkGrounded(-Vector3.up))
             {
-                myState = PlayerState.RUNNING;
-                timer += Time.deltaTime;
+                
 
-                if(Input.GetKey("s"))
+                if (myRB.velocity.x > 1 || myRB.velocity.x < -1)
                 {
-                    if(sameSlide == false)
+                    myState = PlayerState.RUNNING;
+                    timer += Time.deltaTime;
+
+                    if (Input.GetKey("s"))
                     {
-                        myState = PlayerState.SLIDING;
-                        myRB.AddForce (new Vector2(slideSpeed, 0));//move player using velocity    
+                        if (sameSlide == false)
+                        {
+                            myState = PlayerState.SLIDING;
+                            myRB.AddForce(new Vector2(slideSpeed, 0));//move player using velocity    
+                        }
                     }
+                }
+                else
+                {
+                    timer = 0;
+                    runFrame = 0;
+                    myState = PlayerState.IDLE;//default to idle when grounded
+                }
+
+                if ((Input.GetButton("Jump")) && checkGrounded(-Vector3.up))
+                {
+                    myState = PlayerState.JUMPING;
+                    myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
+                    flipVelocity = myRB.velocity.x;
+                }
+
+                myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player using velocity    
+            }
+            else if (checkGrounded(Vector3.right))
+            {
+                myState = PlayerState.HANG;
+                dirRight = true;
+                if (Input.GetButton("Jump"))
+                {
+                    myState = PlayerState.JUMPING;
+                    myRB.velocity = new Vector2(-wallJumpXForce, jumpForce);//jump player using velocity
+                    flipVelocity = myRB.velocity.x;
+                }
+            }
+            else if (checkGrounded(Vector3.left))
+            {
+                myState = PlayerState.HANG;
+                dirRight = false;
+                if (Input.GetButton("Jump"))
+                {
+                    myState = PlayerState.JUMPING;
+                    myRB.velocity = new Vector2(wallJumpXForce, jumpForce);//jump player using velocity
+                    flipVelocity = myRB.velocity.x;
                 }
             }
             else
             {
-                timer = 0;
-                runFrame = 0;
-                myState = PlayerState.IDLE;//default to idle when grounded
-            }
-
-            if ((Input.GetButton("Jump")) && checkGrounded(-Vector3.up))
-            {
-                myState = PlayerState.JUMPING;
-                myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
-                flipVelocity = myRB.velocity.x;
-            }
-
-            myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player using velocity    
-        }
-
-        else if (checkGrounded(Vector3.right))
-        {
-            myState = PlayerState.HANG;
-            dirRight = true;
-            if (Input.GetButton("Jump"))
-            {
-                myState = PlayerState.JUMPING;
-                myRB.velocity = new Vector2(-wallJumpXForce, jumpForce);//jump player using velocity
-                flipVelocity = myRB.velocity.x;
-            }
-        }
-
-        else if (checkGrounded(Vector3.left))
-        {
-            myState = PlayerState.HANG;
-            dirRight = false;
-            if (Input.GetButton("Jump"))
-            {
-                myState = PlayerState.JUMPING;
-                myRB.velocity = new Vector2(wallJumpXForce, jumpForce);//jump player using velocity
-                flipVelocity = myRB.velocity.x;
+                myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player using velocity
             }
         }
         else
         {
-            myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player using velocity
+            
+            if(Input.GetKey("w"))
+            {
+                myState = PlayerState.CLIMBINGUP;
+            }
+            else if(Input.GetKey("s"))
+            {
+                myState = PlayerState.CLIMBINGDOWN;
+            }
+            else
+            {
+                myState = PlayerState.SWINGING;
+            }
         }
 
         if(myState != PlayerState.SLIDING)
@@ -223,6 +262,10 @@ public class PlayerControl : MonoBehaviour
             case PlayerState.SLIDING:
                 graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
                 graphic.sprite = normal.slide;
+                break;
+            case PlayerState.SWINGING:
+                graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+                graphic.sprite = normal.hang;
                 break;
         }
 

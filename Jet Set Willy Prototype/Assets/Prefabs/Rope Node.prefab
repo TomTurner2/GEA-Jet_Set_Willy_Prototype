@@ -11,7 +11,8 @@ GameObject:
   - 212: {fileID: 21283664}
   - 58: {fileID: 5844520}
   - 50: {fileID: 5065414}
-  m_Layer: 8
+  - 114: {fileID: 11476210}
+  m_Layer: 0
   m_Name: Rope Node
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +47,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &5844520
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -61,6 +62,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.2
+--- !u!114 &11476210
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 173018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6ab28c50937a794397aa15797aba3a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &21283664
 SpriteRenderer:
   m_ObjectHideFlags: 1
