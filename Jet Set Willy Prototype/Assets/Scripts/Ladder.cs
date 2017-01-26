@@ -7,14 +7,14 @@ public class Ladder : MonoBehaviour
     private SpriteRenderer ladderSprite = null;
     public GameObject graphicObject = null;
 
-    public SpriteSet normal;
+    public SpriteSet sprites;
 
     // Use this for initialization
     void Start()
     {
         player = FindObjectOfType<PlayerControl>();
         ladderSprite = graphicObject.GetComponent<SpriteRenderer>();
-        ladderSprite.sprite = normal.idle;
+        ladderSprite.sprite = sprites.idle;
     }
 
     // Update is called once per frame
@@ -28,7 +28,8 @@ public class Ladder : MonoBehaviour
         if (col.tag == "Player")
         {
             player.onLadder = true;
-           //ladderSprite.texture.
+            //ladderSprite.texture.
+            ladderSprite.sprite = sprites.idle;
         }
     }
 
