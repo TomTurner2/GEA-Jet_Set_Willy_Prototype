@@ -213,6 +213,13 @@ public class PlayerControl : MonoBehaviour
             {
                 myState = PlayerState.SWINGING;
             }
+
+            if (Input.GetButton("Jump"))
+            {
+                myState = PlayerState.JUMPING;
+                myRB.velocity = new Vector2(wallJumpXForce, jumpForce);//jump player using velocity
+                flipVelocity = myRB.velocity.x;
+            }
         }
 
         if(myState != PlayerState.SLIDING)
@@ -232,7 +239,6 @@ public class PlayerControl : MonoBehaviour
 
     void executeState()
     {
-        Debug.Log(myState);
         switch (myState)
         {
             case PlayerState.IDLE:

@@ -506,6 +506,10 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 176762139cb6cf44cb3b75bdf5779335, type: 2}
+    - target: {fileID: 11471910, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
+      propertyPath: climbSpeed
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6113572, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}

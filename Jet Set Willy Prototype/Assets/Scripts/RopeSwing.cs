@@ -33,7 +33,7 @@ public class RopeSwing : MonoBehaviour
     {
         if (ropeLength > 1)
         {
-            swingRope();
+            //swingRope();
             updateRopeRenderer();
             updateMaterial();
         }
@@ -118,24 +118,6 @@ public class RopeSwing : MonoBehaviour
     }
 
 
-    private void tellNodeItsConnections(GameObject node, int index)
-    {
-        RopeClimbPoint climbPoint = node.GetComponent<RopeClimbPoint>();
-        if(index > 0 && index < ropePoints.Count-1)//if i have nodes above or bellow
-        {
-            climbPoint.setNodes(ropePoints[index-1].transform, ropePoints[index + 1].transform);//add both
-        }
-        else if (index > 0)//if I only have nodes above me
-        {
-            climbPoint.setNodes(ropePoints[index - 1].transform, null);//add top node
-        }
-        else//otherwise I'm the top node
-        {
-            climbPoint.setNodes(null, ropePoints[index + 1].transform);//add node bellow
-        }
-    }
-
-
     /// <summary>
     /// Adds the calculated node positions into the line renderer.
     /// Also gives the nodes it's connections.
@@ -149,9 +131,15 @@ public class RopeSwing : MonoBehaviour
         for(int i = 0; i < ropePoints.Count; i++)
         {
             ropeRender.SetPosition(pos, ropePoints[i].transform.position);
-            tellNodeItsConnections(ropePoints[i], i);
+            //tellNodeItsConnections(ropePoints[i], i);
             pos++;
         }
         
+    }
+
+
+    public List<GameObject> getClimbPoints()
+    {
+        return ropePoints;
     }
 }
