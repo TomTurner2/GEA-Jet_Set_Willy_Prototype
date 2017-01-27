@@ -13,8 +13,8 @@ public class Ladder : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<PlayerControl>();
-        ladderSprite = graphicObject.GetComponent<SpriteRenderer>();
-        ladderSprite.sprite = sprites.idle;
+       // ladderSprite = graphicObject.GetComponent<SpriteRenderer>();
+      //  ladderSprite.sprite = sprites.idle;
     }
 
     // Update is called once per frame
@@ -29,7 +29,7 @@ public class Ladder : MonoBehaviour
         {
             player.onLadder = true;
             //ladderSprite.texture.
-            ladderSprite.sprite = sprites.idle;
+           // ladderSprite.sprite = sprites.idle;
         }
     }
 

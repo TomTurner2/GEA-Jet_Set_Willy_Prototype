@@ -33,6 +33,7 @@ public class PlayerControl : MonoBehaviour
     private PlayerState myState = PlayerState.IDLE;
     private BoxCollider2D topCollider = null;
     public GameObject graphicObject = null;
+    private GameObject canvas = null;
     private SpriteRenderer graphic = null;
     private Transform graphicTransform = null;
 
@@ -40,7 +41,7 @@ public class PlayerControl : MonoBehaviour
     bool dirRight = false;//quick fix for hang, will refactor
     private float flipVelocity = 1;
     //private bool finishedJump = false;
-	public int score = 0;
+	public int score = 3;
 	public Transform respawnPoint = null;
 	public int lives = 8;
     public float slideSpeed = 6;
@@ -69,6 +70,7 @@ public class PlayerControl : MonoBehaviour
 
     void Start ()
     {
+        canvas = GameObject.Find("Canvas");
         myRB = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<CircleCollider2D>();
         topCollider = GetComponentInChildren<BoxCollider2D>();
@@ -78,6 +80,8 @@ public class PlayerControl : MonoBehaviour
         right = true;
         notJumpable = ~(notJumpable);
         gravityStore = myRB.gravityScale;
+        canvas.GetComponent<UI>().playerHealth = lives;
+
     }
 
     void FixedUpdate ()
@@ -280,7 +284,8 @@ public class PlayerControl : MonoBehaviour
 	{
 		myState = PlayerState.DEAD;
 		lives--;
-		transform.position = respawnPoint.position;
+        canvas.GetComponent<UI>().playerHealth = lives;
+        transform.position = respawnPoint.position;
 		graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
 		myState = PlayerState.IDLE;
 	}

@@ -2,14 +2,15 @@
 using System.Collections;
 
 public class Collectible : MonoBehaviour {
-
+    private GameObject canvas;
 	// Use this for initialization
+
 	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        canvas = GameObject.Find("Canvas");
+    }
+
+    // Update is called once per frame
+    void Update () {
 	
 	}
 
@@ -20,7 +21,8 @@ public class Collectible : MonoBehaviour {
 		{
 			//Destroy self, add score to player
 			col.gameObject.SendMessage("collect");
-			Destroy(this.gameObject);
+            canvas.GetComponent<UI>().score ++;
+            Destroy(this.gameObject);
 		}
 	}
 }
