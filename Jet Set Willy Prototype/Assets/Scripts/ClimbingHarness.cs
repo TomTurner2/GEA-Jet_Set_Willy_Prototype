@@ -25,16 +25,16 @@ public class ClimbingHarness : MonoBehaviour
         climbing = isClimbing;
         climbPositions = ropeNodes;
         speed = player.getClimbSpeed();
-        //currentStartPoint = climbPositions.IndexOf(hitNode);
-        currentStartPoint = 0;
+        currentStartPoint = climbPositions.IndexOf(hitNode);
+
         startMarker = hitNode.transform;
         transform.position = startMarker.position;
         progress = 0;
 
         player.setPlayerState(PlayerState.SWINGING);
-        GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition;
+
         setUpPoint();
-        //initPoint();
+        initPoint();
     }
     
     private void initPoint()
@@ -42,14 +42,11 @@ public class ClimbingHarness : MonoBehaviour
         startMarker = climbPositions[currentStartPoint].transform;
         if(currentStartPoint + 1 < climbPositions.Count)
         {
-            endMarker = climbPositions[currentStartPoint + 1].transform;
-            progress = 0;
+            setUpPoint();
         }
         else
         {
-            endMarker = startMarker;
-            startMarker = climbPositions[currentStartPoint - 1].transform;
-            progress = 1;
+            SetDownPoints();
         }
     }
 
@@ -114,12 +111,11 @@ public class ClimbingHarness : MonoBehaviour
         delayTimer();  
     }
 
-    private void checkJumpingOff()
+    private void checkJumpingOff()//need jump delay
     {
         if (player.getPlayerState() == PlayerState.JUMPING && climbPositions != null)//need a delay on first grab
         {
-            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
-            GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+            GetComponent<Rigidbody2D>().AddForce(climbPositions[currentStartPoint].GetComponent<Rigidbody2D>().velocity);
             climbing = false;
             climbPositions = null;
             canGrab = false;

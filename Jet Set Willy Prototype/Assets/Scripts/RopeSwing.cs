@@ -33,6 +33,7 @@ public class RopeSwing : MonoBehaviour
     {
         if (ropeLength > 1)
         {
+            swingRope();
             updateRopeRenderer();
             updateMaterial();
         }
