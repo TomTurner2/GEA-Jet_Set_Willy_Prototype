@@ -9,7 +9,6 @@ public class RopeSwing : MonoBehaviour
     private LineRenderer ropeRender = null;
     private float nodeDiameter = 0;
     private List<GameObject> ropePoints = new List<GameObject>();
-    private float timer = 0;
 
     public GameObject ropeSprite;
     [Range(0.1f, 1)]
@@ -99,6 +98,7 @@ public class RopeSwing : MonoBehaviour
             GameObject rope = Instantiate(ropeSprite) as GameObject;//create rope node
             rope.transform.position = Vector2.Lerp(transform.position, endPoint, i);
             rope.transform.parent = this.transform;//add it as a child              
+            rope.GetComponent<RopeClimbPoint>().setRopeRef(this);//let it know me
 
             Rigidbody2D pointRB = rope.GetComponent<Rigidbody2D>();
             if (lastPoint != pointRB)
@@ -137,6 +137,9 @@ public class RopeSwing : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Returns a list of the nodes in this rope.
+    /// </summary>
     public List<GameObject> getClimbPoints()
     {
         return ropePoints;

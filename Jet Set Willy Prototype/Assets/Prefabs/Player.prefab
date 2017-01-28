@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 411166}
   - 212: {fileID: 21271984}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Platform Guy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ GameObject:
   - 50: {fileID: 5062106}
   - 58: {fileID: 5817990}
   - 61: {fileID: 6187608}
-  - 61: {fileID: 6113572}
+  - 114: {fileID: 11473286}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -55,8 +55,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 196522}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.02, y: -0.02, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 4.020498}
+  m_LocalPosition: {x: 4.27, y: 0.12, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 411166}
   m_Father: {fileID: 0}
@@ -92,20 +92,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.15}
   serializedVersion: 2
   m_Radius: 0.3
---- !u!61 &6113572
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 196522}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 0.54, y: 0.9}
 --- !u!61 &6187608
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -133,18 +119,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notJumpable:
     serializedVersion: 2
-    m_Bits: 272
+    m_Bits: 256
   graphicObject: {fileID: 192522}
   score: 0
   respawnPoint: {fileID: 0}
   lives: 8
+  slideSpeed: 6
+  frozen: 0
   speed: 5
   maxSpeed: 5
-  runAnimDelay: 0.1
+  climbSpeed: 6
+  runAnimDelay: 0.08
   jumpForce: 5
   wallJumpXForce: 5
-  jumpTolerance: 0.04
+  jumpTolerance: 0.1
   flipBaseSpeed: 300
+  onLadder: 0
+  ropeClimbSpeed: 5
+  climbVelocity: 5
   normal:
     jump: {fileID: 21300010, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
     run:
@@ -154,6 +146,19 @@ MonoBehaviour:
     idle: {fileID: 21300000, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
     slide: {fileID: 21300008, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
     hang: {fileID: 21300012, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
+--- !u!114 &11473286
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 196522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b7e279e9d86cf449ee6939626198d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  xJumpVelocityMod: 10
+  grabDelay: 1
 --- !u!212 &21271984
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -164,7 +169,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 2100000, guid: 176762139cb6cf44cb3b75bdf5779335, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0

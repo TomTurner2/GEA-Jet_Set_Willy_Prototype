@@ -3,33 +3,45 @@ using System.Collections.Generic;
 
 public class RopeClimbPoint : MonoBehaviour
 {
+    private RopeSwing myRopeRef = null;
+
+    public void setRopeRef(RopeSwing rope)
+    {
+        myRopeRef = rope;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            ClimbingHarness harness = collision.GetComponent<ClimbingHarness>();
-            PlayerControl player = collision.GetComponent<PlayerControl>();
-            if(harness && player && harness.enabled == true)
-            {
-                if ((player.getPlayerState() == PlayerState.JUMPING || player.getPlayerState() == PlayerState.HANG) && harness.getClimbing() == false)
-                {
-                    if(harness.canGrab == true)
-                    {
-                        attachHarness(harness, player);
-                    }
-                    else if (harness.lastRope != GetComponentInParent<RopeSwing>())
-                    {
-                        harness.resetTimer();
-                        harness.lastRope = GetComponentInParent<RopeSwing>();
-                    }
-                }
-            }
+            attachHarness(collision);
         }
     }
 
-    public void attachHarness(ClimbingHarness harness, PlayerControl player)
+
+    /// <summary>
+    /// Attaches the harness to this nodes rope. Will only attach if the player
+    /// hasn't too recently detached from this rope.
+    /// </summary>
+    public void attachHarness(Collider2D collision)
     {
-        harness.setupHarness(true, GetComponentInParent<RopeSwing>().getClimbPoints(), gameObject, GetComponentInParent<RopeSwing>());
+        ClimbingHarness harness = collision.GetComponent<ClimbingHarness>();
+        PlayerControl player = collision.GetComponent<PlayerControl>();
+        if (harness && player && harness.enabled == true)
+        {
+            if ((player.getPlayerState() == PlayerState.JUMPING || player.getPlayerState() == PlayerState.HANG) && harness.getClimbing() == false)
+            {
+                if (harness.getCanGrab() == true)
+                {
+                    harness.setupHarness(true, myRopeRef.getClimbPoints(), gameObject, myRopeRef);
+                }
+                else if (harness.getLastRope() != myRopeRef)
+                {
+                    harness.resetTimer();
+                    harness.setupHarness(true, myRopeRef.getClimbPoints(), gameObject, myRopeRef);
+                }
+            }
+        }
     }
 }

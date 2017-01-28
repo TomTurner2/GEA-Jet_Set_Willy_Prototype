@@ -28,7 +28,7 @@ public class SpriteSet
 public class PlayerControl : MonoBehaviour
 {
     const float REDUCE_CAST_RADIUS = 0.01f;
-    const float DEADZONE = 0.1f;
+    const float DEADZONE = 1.5f;
 
     public LayerMask notJumpable = 0;
     private Rigidbody2D myRB = null;
@@ -66,7 +66,7 @@ public class PlayerControl : MonoBehaviour
     public float jumpTolerance = 0.1f;
     public float flipBaseSpeed = 300.0f;
     public bool onLadder = false;
-    public float climbSpeed = 5.0f;
+    public float ropeClimbSpeed = 5.0f;
     public float climbVelocity = 5.0f;
     private float gravityStore = 0;
 
@@ -84,9 +84,16 @@ public class PlayerControl : MonoBehaviour
         right = true;
         notJumpable = ~(notJumpable);
         gravityStore = myRB.gravityScale;
-        canvas.GetComponent<UI>().playerHealth = lives;
+        
+        if(canvas.GetComponent<UI>())
+        {
+            canvas.GetComponent<UI>().playerHealth = lives;
+        }
+      
 
     }
+
+
 
     void FixedUpdate ()
     {
@@ -95,13 +102,9 @@ public class PlayerControl : MonoBehaviour
 			handleInput ();
 			executeState ();
 		}
-		else
-		{
-
-		}
     }
 
-    void setDirection(float xInput)
+    void determineDirection()
     {
         if (myRB.velocity.x > DEADZONE)
         {
@@ -110,9 +113,12 @@ public class PlayerControl : MonoBehaviour
         else if (myRB.velocity.x < -DEADZONE)
         {
             right = false;
-        }
+        }     
+    }
 
-        
+    public float getJumpForce()
+    {
+        return jumpForce;
     }
 
     public PlayerState getPlayerState()
@@ -127,20 +133,18 @@ public class PlayerControl : MonoBehaviour
 
     public float getClimbSpeed()
     {
-        return climbSpeed;
+        return ropeClimbSpeed;
     }
 
     void handleInput()
     {
         float movement = Input.GetAxis("Horizontal");
-        setDirection(movement);//can only change direction on ground
+        determineDirection();
 
         if (myState != PlayerState.SWINGING && myState != PlayerState.CLIMBINGUP && myState != PlayerState.CLIMBINGDOWN)
         {
             if (checkGrounded(-Vector3.up))
             {
-                
-
                 if (myRB.velocity.x > 1 || myRB.velocity.x < -1)
                 {
                     myState = PlayerState.RUNNING;
@@ -195,6 +199,8 @@ public class PlayerControl : MonoBehaviour
             }
             else
             {
+                //need a falling state and sprite
+                //myState = PlayerState.JUMPING;
                 myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player using velocity
             }
         }
@@ -213,12 +219,13 @@ public class PlayerControl : MonoBehaviour
             {
                 myState = PlayerState.SWINGING;
             }
-
+         
             if (Input.GetButton("Jump"))
             {
                 myState = PlayerState.JUMPING;
                 myRB.velocity = new Vector2(wallJumpXForce, jumpForce);//jump player using velocity
                 flipVelocity = myRB.velocity.x;
+                
             }
         }
 
@@ -235,6 +242,7 @@ public class PlayerControl : MonoBehaviour
         {
             myRB.gravityScale = gravityStore;
         }
+
     }
 
     void executeState()

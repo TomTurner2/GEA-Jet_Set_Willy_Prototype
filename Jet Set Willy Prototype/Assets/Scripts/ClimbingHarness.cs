@@ -2,94 +2,57 @@
 using System.Collections.Generic;
 
 public class ClimbingHarness : MonoBehaviour
-{
-    List<GameObject> climbPositions = new List<GameObject>();
-    PlayerControl player = null;
-    Vector3 currentPos;
-    Vector3 lerpPos;
-    Transform startMarker, endMarker;
-    int currentStartPoint = 0;
-    bool climbing = false;
-    public bool canGrab = true;
-    public RopeSwing lastRope = null;
-    float grabDelay = 0.0f;
-
-  
+{  
+    private List<GameObject> climbPositions = new List<GameObject>();
+    private PlayerControl player = null;
+    private Rigidbody2D playerRB = null;
+    private Vector3 currentPos;
+    private Vector3 lerpPos;
+    private Transform startNode, endNode;
+    private int currentStartPoint = 0;
+    private bool climbing = false;
+    private bool canGrab = true;
+    private RopeSwing lastRope = null;
+    private float grabTimer = 0;
     private float speed = 0;
     private float progress = 0;
 
+    public float xJumpVelocityMod = 10;
+    public float grabDelay = 1f;
 
-    public void setupHarness(bool isClimbing, List<GameObject> ropeNodes, GameObject hitNode, RopeSwing currentRope)
-    {
-        lastRope = currentRope;
-        climbing = isClimbing;
-        climbPositions = ropeNodes;
-        speed = player.getClimbSpeed();
-        currentStartPoint = climbPositions.IndexOf(hitNode);
 
-        startMarker = hitNode.transform;
-        transform.position = startMarker.position;
-        progress = 0;
-
-        player.setPlayerState(PlayerState.SWINGING);
-
-        setUpPoint();
-        initPoint();
-    }
-    
-    private void initPoint()
-    {
-        startMarker = climbPositions[currentStartPoint].transform;
-        if(currentStartPoint + 1 < climbPositions.Count)
-        {
-            setUpPoint();
-        }
-        else
-        {
-            SetDownPoints();
-        }
-    }
-
+    #region GettersAndSetters
     public bool getClimbing()
     {
         return climbing;
     }
 
 
-    void setUpPoint()
+    public bool getCanGrab()
     {
-        startMarker = climbPositions[currentStartPoint].transform;//start point is the one we just reached
-        if (currentStartPoint + 1 < climbPositions.Count)//if we can go further up
-            endMarker = climbPositions[currentStartPoint + 1].transform;//our next target is the node up
-        progress = 0;// and we have made no progress in reaching it
+        return canGrab;
     }
 
 
-    void SetDownPoints()
+    public RopeSwing getLastRope()
     {
-        endMarker = climbPositions[currentStartPoint].transform;//our end becomes our start
-        if (currentStartPoint > 0)
-        {
-            currentStartPoint--;
-            startMarker = climbPositions[currentStartPoint].transform;
-        }
-
-        progress = 1;
+        return lastRope;
     }
 
 
-    // Use this for initialization
-    void Start ()
+    public void setLastRope(RopeSwing rope)
     {
-        player = GetComponent<PlayerControl>();
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        lastRope = rope;
+    }
+    #endregion
+
+
+    // Update is called once per frame
+    void Update()
     {
-        if (climbing == true && climbPositions != null && canGrab)
+        if (climbing == true && climbPositions != null && canGrab)//if we are in use
         {
-            transform.rotation = new Quaternion (0,0,0,0);
+            transform.rotation = new Quaternion(0, 0, 0, 0);//prevent rotation
             checkJumpingOff();
 
             if (player.getPlayerState() == PlayerState.CLIMBINGUP)
@@ -101,21 +64,114 @@ public class ClimbingHarness : MonoBehaviour
                 climbDown();//move down current pos
             }
 
-
             if (climbPositions != null && climbing == true)
             {
-                Debug.Log("doing the thing");
-              transform.position =  Vector2.Lerp(startMarker.position, endMarker.position, progress);//maintain current pos
+                transform.position = Vector2.Lerp(startNode.position, endNode.position, progress);//maintain current pos
             }
         }
-        delayTimer();  
+        grabDelayTimer();
     }
 
-    private void checkJumpingOff()//need jump delay
+
+    private void FixedUpdate()
+    {
+        if (climbing == true)
+        {
+            playerRB.velocity = climbPositions[currentStartPoint].GetComponent<Rigidbody2D>().velocity;//update player vel so direection changing works
+        }
+    }
+
+
+    /// <summary>
+    /// Initialises the climbing process, readying the harness for travelling up and down the
+    /// given rope.
+    /// </summary>
+    public void setupHarness(bool isClimbing, List<GameObject> ropeNodes, GameObject hitNode, RopeSwing currentRope)
+    {
+        player.setPlayerState(PlayerState.SWINGING);
+
+        //init harness variables
+        lastRope = currentRope;
+        climbing = isClimbing;
+        climbPositions = ropeNodes;
+        speed = player.getClimbSpeed();
+
+        //init node traversal
+        currentStartPoint = climbPositions.IndexOf(hitNode);
+        startNode = hitNode.transform;
+        transform.position = startNode.position;
+        progress = 0;
+        initCurrentNodeTarget();
+    }
+
+    
+    /// <summary>
+    /// Sets the first node target to move towards based on the players
+    /// initial position on the rope
+    /// </summary>
+    private void initCurrentNodeTarget()
+    {
+        startNode = climbPositions[currentStartPoint].transform;
+        if(currentStartPoint + 1 < climbPositions.Count)
+        {
+            setNodeTargetAbove();
+        }
+        else
+        {
+            setNodeTargetBelow();
+        }
+    }
+
+
+    /// <summary>
+    /// Determines if there is a node above to move to and if so sets it as the next lerp target.
+    /// </summary>
+    void setNodeTargetAbove()
+    {
+        startNode = climbPositions[currentStartPoint].transform;//start point is the one we just reached
+        if (currentStartPoint + 1 < climbPositions.Count)//if we can go further up
+        { 
+            endNode = climbPositions[currentStartPoint + 1].transform;//our next target is the node up
+        }
+        progress = 0;// and we have made no progress in reaching it
+    }
+
+
+    /// <summary>
+    ///  Determines if there is a node below to move to and if so sets it as the next lerp target.
+    /// </summary>
+    void setNodeTargetBelow()
+    {
+        endNode = climbPositions[currentStartPoint].transform;//our end becomes our start
+        if (currentStartPoint > 0)//if we can go down
+        {
+            currentStartPoint--;
+            startNode = climbPositions[currentStartPoint].transform;//shift the start of our journey to that node
+        }
+        progress = 1;//we are at the end of our journey, ready to go back to the start
+    }
+
+
+    // Use this for initialization
+    void Start ()
+    {
+        player = GetComponent<PlayerControl>();
+        playerRB = player.GetComponent<Rigidbody2D>();
+	}
+
+
+
+    /// <summary>
+    /// Checks if the player has decided to jump off. Detaches harness from rope
+    /// and adds some velocity to the players departure.
+    /// </summary>
+    private void checkJumpingOff()
     {
         if (player.getPlayerState() == PlayerState.JUMPING && climbPositions != null)//need a delay on first grab
         {
-            GetComponent<Rigidbody2D>().AddForce(climbPositions[currentStartPoint].GetComponent<Rigidbody2D>().velocity);
+            playerRB.velocity = Vector2.zero;
+            Vector3 jumpVelocity = new Vector2(climbPositions[currentStartPoint].GetComponent<Rigidbody2D>().velocity.x * xJumpVelocityMod, player.getJumpForce());
+            playerRB.velocity = jumpVelocity;
             climbing = false;
             climbPositions = null;
             canGrab = false;
@@ -124,50 +180,65 @@ public class ClimbingHarness : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Resets the grab delay timer.
+    /// </summary>
     public void resetTimer()
     {
-        grabDelay = 0;
+        grabTimer = 0;
         canGrab = true;
     }
 
 
-    private void delayTimer()
+    /// <summary>
+    /// Adds a delay before player can attach again. Used to
+    /// prevent instant re-attaching when jumping off. Is ignored if the
+    /// player is trying to grab a different rope.
+    /// </summary>
+    private void grabDelayTimer()
     {
         if (canGrab == false)
         {
-            grabDelay += Time.deltaTime;
-            if (grabDelay > 1)
+            grabTimer += Time.deltaTime;
+            if (grabTimer > grabDelay)
             {
                 canGrab = true;
-                grabDelay = 0;
+                grabTimer = 0;
             }
         }
     }
 
 
+    /// <summary>
+    /// Decreases the percentage travelled between the current node targets.
+    /// </summary>
     private void climbDown()
     {
-
         if (progress >= 1f && currentStartPoint + 1 < climbPositions.Count - 1)
         {
             currentStartPoint++;//increment so our start becomes the point we just reached
-            setUpPoint();
+            setNodeTargetAbove();
         }
         else
         {
             if (progress < 1)
+            {
                 progress += Time.deltaTime * speed;
+            }    
         }
     }
 
 
+    /// <summary>
+    /// Increases the percentage travelled between the current node targets.
+    /// </summary>
     private void climbUp()
     {
         if (currentStartPoint + 1 < climbPositions.Count)
         {
             if (progress <= 0f && currentStartPoint != 0)//if we have returned to the start and there are still nodes behind us
             {
-                SetDownPoints();
+                setNodeTargetBelow();
             }
             else
             {
@@ -180,16 +251,6 @@ public class ClimbingHarness : MonoBehaviour
                     }
                 }
             }
-
         }
-        //else if(climbPositions != null)
-        //{
-        //    GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
-        //    GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-        //    player.setPlayerState(PlayerState.JUMPING);
-        //    climbing = false;
-        //    climbPositions = null;
-        //    canGrab = false;
-        //}
     }
 }
