@@ -4,8 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class ScreenEdgeMethod2 : MonoBehaviour
 {
-    public GameObject mainCam;
-    public GameObject player;
+    private GameObject player;
     public char direction;
     private const int sizeX = 16;
     private const int sizeY = 9;
@@ -24,7 +23,7 @@ public class ScreenEdgeMethod2 : MonoBehaviour
     private float _timeStartedLerping;
 
 	public string target_scene;
-	public GameObject target_scene_objects;
+	private GameObject target_scene_objects;
 	public string current_scene;
 	public GameObject current_scene_objects;
 
@@ -32,6 +31,8 @@ public class ScreenEdgeMethod2 : MonoBehaviour
     void StartLerping()
     {
         _isLerping = true;
+		target_scene_objects = SceneManager.GetSceneByName(target_scene).GetRootGameObjects()[0];
+
         _timeStartedLerping = Time.time;
 
 		_sceneStartPosition = current_scene_objects.transform.position;
@@ -96,13 +97,14 @@ public class ScreenEdgeMethod2 : MonoBehaviour
     }
 
 
-    void OnTriggerEnter2D(BoxCollider2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject == player)
+		if (col.gameObject.tag == "Player" && col is CircleCollider2D)
 		{
+			player = col.gameObject;
             //Scrolls to the next scene, loads in scene from file?
 			SceneManager.LoadScene (target_scene, LoadSceneMode.Additive);
-			target_scene_objects = SceneManager.GetSceneByName(target_scene).GetRootGameObjects()[0];
+
 
             StartLerping();
         }

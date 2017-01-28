@@ -1,0 +1,5 @@
+1. Start by opening scene 'Base'.
+2. Change the value of 'first scene' in the collision volume to desired scene to load.
+3. Scenes should be 16 units by 9 units in size (screen marker object provided) and centered on (0,0).
+4. Loaded scenes should not have their own camera or player, that is brought in from the base scene.
+5. Scenes are connected via 'screen edge' objects that handle transitions (currently 50% working)
