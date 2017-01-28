@@ -448,7 +448,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 463456, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -0.02
+      value: 1.56
       objectReference: {fileID: 0}
     - target: {fileID: 463456, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
       propertyPath: m_LocalPosition.y
@@ -508,7 +508,7 @@ Prefab:
       objectReference: {fileID: 2100000, guid: 176762139cb6cf44cb3b75bdf5779335, type: 2}
     - target: {fileID: 11471910, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
       propertyPath: climbSpeed
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 11471910, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
       propertyPath: speed
@@ -1126,7 +1126,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1421434399}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7b7e279e9d86cf449ee6939626198d4, type: 3}
   m_Name: 

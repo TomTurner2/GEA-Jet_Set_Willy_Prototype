@@ -22,7 +22,6 @@ public class RopeClimbPoint : MonoBehaviour
                     {
                         harness.resetTimer();
                         harness.lastRope = GetComponentInParent<RopeSwing>();
-
                     }
                 }
             }
@@ -31,11 +30,6 @@ public class RopeClimbPoint : MonoBehaviour
 
     public void attachHarness(ClimbingHarness harness, PlayerControl player)
     {
-        harness.setClimbPoints(GetComponentInParent<RopeSwing>().getClimbPoints());
-        harness.setClimbing(true);
-        harness.setCurrentNode(this.gameObject);
-        player.transform.position = transform.position;
-        harness.setCurrentPosition(transform.position);
-        player.setPlayerState(PlayerState.SWINGING);
+        harness.setupHarness(true, GetComponentInParent<RopeSwing>().getClimbPoints(), gameObject, GetComponentInParent<RopeSwing>());
     }
 }

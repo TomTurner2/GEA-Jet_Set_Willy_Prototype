@@ -33,7 +33,6 @@ public class RopeSwing : MonoBehaviour
     {
         if (ropeLength > 1)
         {
-            //swingRope();
             updateRopeRenderer();
             updateMaterial();
         }
@@ -131,7 +130,6 @@ public class RopeSwing : MonoBehaviour
         for(int i = 0; i < ropePoints.Count; i++)
         {
             ropeRender.SetPosition(pos, ropePoints[i].transform.position);
-            //tellNodeItsConnections(ropePoints[i], i);
             pos++;
         }
         
