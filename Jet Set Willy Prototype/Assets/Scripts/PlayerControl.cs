@@ -94,7 +94,6 @@ public class PlayerControl : MonoBehaviour
     }
 
 
-
     void FixedUpdate ()
     {
 		if (!frozen)
@@ -102,6 +101,12 @@ public class PlayerControl : MonoBehaviour
 			handleInput ();
 			executeState ();
 		}
+    }
+
+
+    public bool getDirection()
+    {
+        return right;
     }
 
     void determineDirection()

@@ -170,7 +170,16 @@ public class ClimbingHarness : MonoBehaviour
         if (player.getPlayerState() == PlayerState.JUMPING && climbPositions != null)//need a delay on first grab
         {
             playerRB.velocity = Vector2.zero;
-            Vector3 jumpVelocity = new Vector2(climbPositions[currentStartPoint].GetComponent<Rigidbody2D>().velocity.x * xJumpVelocityMod, player.getJumpForce());
+            Vector2 jumpVelocity;
+            if (player.getDirection())
+            {
+                jumpVelocity = new Vector2(1 * xJumpVelocityMod, 1 * player.getJumpForce());
+            }
+            else
+            {
+                 jumpVelocity = new Vector2(-1 * xJumpVelocityMod, 1 * player.getJumpForce());
+            }
+            //Vector3 jumpVelocity = new Vector2(climbPositions[currentStartPoint].GetComponent<Rigidbody2D>().velocity.x * xJumpVelocityMod, player.getJumpForce());
             playerRB.velocity = jumpVelocity;
             climbing = false;
             climbPositions = null;
