@@ -13,24 +13,25 @@ public class ClimbingHarness : MonoBehaviour
     public bool canGrab = true;
     public RopeSwing lastRope = null;
     float grabDelay = 0.0f;
-    PlayerState prev;
-    private Transform startMarker, endMarker;
+
     private float startTime;
     private float speed;
     private float journey;
+    private float journeyLength;
+    private float progress = 0;
 
-    public void setupHarness(bool isClimbing, List<GameObject> ropeNodes, GameObject hitNode)
-    {
-        climbing = isClimbing;
-        climbPositions = ropeNodes;
-        currentNode = climbPositions.IndexOf(hitNode);
-        currentStartPos = hitNode;
-        currentPos = currentStartPos.transform.position;
-        lerpPos = currentPos;
-        journey = 0;
-        GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition;
+    //public void setupHarness(bool isClimbing, List<GameObject> ropeNodes, GameObject hitNode)
+    //{
+    //    climbing = isClimbing;
+    //    climbPositions = ropeNodes;
+    //    currentNode = climbPositions.IndexOf(hitNode);
+    //    currentStartPos = hitNode;
+    //    currentPos = currentStartPos.transform.position;
+    //    lerpPos = currentPos;
+    //    journey = 0;
+    //    GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition;
 
-    }
+    //}
 
     public void setClimbing(bool isClimbing)
     {
@@ -57,10 +58,12 @@ public class ClimbingHarness : MonoBehaviour
 
     public void setCurrentPosition(Vector2 pos)
     {
+        progress = 0;
         currentPos = pos;
         journey = 0;
         lerpPos = currentStartPos.transform.position;
-        prev = PlayerState.SWINGING;
+        startTime = Time.time;
+        journeyLength = Vector3.Distance(currentStartPos.transform.position, climbPositions[currentNode+1].transform.position);
     }
 
 
@@ -81,8 +84,6 @@ public class ClimbingHarness : MonoBehaviour
             {
                 GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
                 GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-
-                player.GetComponent<Rigidbody2D>().velocity = climbPositions[currentNode].GetComponent<Rigidbody2D>().velocity;
                 climbing = false;
                 climbPositions = null;
                 canGrab = false;
@@ -91,12 +92,10 @@ public class ClimbingHarness : MonoBehaviour
 
             if (player.getPlayerState() == PlayerState.CLIMBINGUP)
             {
-                prev = PlayerState.CLIMBINGUP;
                 climbUp();//move up current pos
             }
             else if (player.getPlayerState() == PlayerState.CLIMBINGDOWN)
             {
-                prev = PlayerState.CLIMBINGDOWN;
                 climbDown();//move down current pos
             }
             else if (climbing == true)
@@ -137,21 +136,27 @@ public class ClimbingHarness : MonoBehaviour
     {
         if (currentNode != 0)
         {
-            if (Vector3.Distance(lerpPos, climbPositions[currentNode].transform.position) < 0.5f)
+            if (Vector3.Distance(lerpPos, climbPositions[currentNode].transform.position) < 0.2f)
             {
-                Debug.Log("up node" + Vector3.Distance(lerpPos, climbPositions[currentNode].transform.position));
-                    currentStartPos = climbPositions[currentNode];
+                currentStartPos = climbPositions[currentNode];
                 currentNode--;
+                startTime = 0;
+                journeyLength = Vector3.Distance(currentStartPos.transform.position, climbPositions[currentNode].transform.position);
+             
             }
             else
             {
-                Debug.Log("lerp up node");
-
-                lerpPos = Vector2.MoveTowards(currentStartPos.transform.position, climbPositions[currentNode].transform.position, Time.deltaTime * player.getClimbSpeed());
+                float distCovered = (Time.time - startTime) * player.getClimbSpeed();
+                float fracJourney = distCovered / journeyLength;
+                fracJourney *= 0.1f;
+                lerpPos = Vector2.MoveTowards(currentStartPos.transform.position, climbPositions[currentNode].transform.position, fracJourney);
             }
-           
-            journey = (Time.deltaTime * player.getClimbSpeed());
-            Debug.Log("journey" + journey);     
+
+            float pdistCovered = (Time.time - startTime) * player.getClimbSpeed();
+            float pfracJourney = pdistCovered / journeyLength;
+            pfracJourney *= 0.1f;
+            journey = pfracJourney ;
+            Debug.Log(journey);
         }
     }
 
@@ -159,26 +164,31 @@ public class ClimbingHarness : MonoBehaviour
     {
         if (currentNode < climbPositions.Count - 1)
         {
-            if (Vector3.Distance(lerpPos, climbPositions[currentNode].transform.position) < 0.5f)
-            {
-                Debug.Log("down node");
-               
+            if (Vector3.Distance(lerpPos, climbPositions[currentNode].transform.position) < 0.2f)
+            {       
                 currentStartPos = climbPositions[currentNode];
                 currentNode++;
+                startTime = 0;
+                journeyLength = Vector3.Distance(currentStartPos.transform.position, climbPositions[currentNode].transform.position);
             }
             else
             {
                 Debug.Log("lerp down node");
-                lerpPos = Vector2.MoveTowards(currentStartPos.transform.position, climbPositions[currentNode].transform.position, Time.deltaTime * player.getClimbSpeed());
+                float distCovered = (Time.time - startTime) * player.getClimbSpeed();
+                float fracJourney = distCovered / journeyLength;
+                fracJourney *= 0.1f;
+                lerpPos = Vector2.MoveTowards(currentStartPos.transform.position, climbPositions[currentNode].transform.position, journeyLength);
             }
-            
+            float pdistCovered = (Time.time - startTime) * player.getClimbSpeed();
+            float pfracJourney = pdistCovered / journeyLength;
+            pfracJourney *= 0.1f;
+            journey = pfracJourney;
             journey = (Time.deltaTime * player.getClimbSpeed());
         }
         else if(climbPositions != null)
         {
             GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
             GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
-            player.GetComponent<Rigidbody2D>().velocity = climbPositions[currentNode].GetComponent<Rigidbody2D>().velocity;
             player.setPlayerState(PlayerState.JUMPING);
             climbing = false;
             climbPositions = null;

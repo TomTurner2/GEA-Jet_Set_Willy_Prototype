@@ -492,7 +492,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11471910, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
       propertyPath: runAnimDelay
-      value: 0.05
+      value: 0.08
       objectReference: {fileID: 0}
     - target: {fileID: 11471910, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
       propertyPath: notJumpable.m_Bits
@@ -508,97 +508,15 @@ Prefab:
       objectReference: {fileID: 2100000, guid: 176762139cb6cf44cb3b75bdf5779335, type: 2}
     - target: {fileID: 11471910, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
       propertyPath: climbSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11471910, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
+      propertyPath: speed
       value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6113572, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
-  m_IsPrefabParent: 0
---- !u!1001 &501226568
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 11473334, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: swingPoint.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 473518, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 5.03
-      objectReference: {fileID: 0}
-    - target: {fileID: 473518, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 5.63
-      objectReference: {fileID: 0}
-    - target: {fileID: 473518, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 473518, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 473518, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 473518, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 473518, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 473518, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_RootOrder
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 473518, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11473334, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: ropeSwingForce
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11473334, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: angles.minAngle
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11473334, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: angles.maxAngle
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 12050896, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_ReceiveShadows
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 12050896, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11473334, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: swingAngle
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 11473334, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: ropeLength
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 140342, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: m_Name
-      value: Rope (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 11473334, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
-      propertyPath: ropeSwingSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
   m_IsPrefabParent: 0
 --- !u!1001 &748427513
 Prefab:
@@ -1198,6 +1116,23 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1421434399 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 196522, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
+  m_PrefabInternal: {fileID: 376583490}
+--- !u!114 &1421434404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1421434399}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7b7e279e9d86cf449ee6939626198d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canGrab: 1
+  lastRope: {fileID: 0}
 --- !u!1001 &1535965022
 Prefab:
   m_ObjectHideFlags: 0
@@ -1740,7 +1675,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1950503817}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 895d3aa4a10c42f4d83cf5c0c50eb7e1, type: 3}
   m_Name: 
