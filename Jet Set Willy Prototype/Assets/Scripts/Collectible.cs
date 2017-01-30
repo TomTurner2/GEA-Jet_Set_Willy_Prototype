@@ -21,8 +21,12 @@ public class Collectible : MonoBehaviour {
 		{
 			//Destroy self, add score to player
 			col.gameObject.SendMessage("collect");
-            canvas.GetComponent<UI>().score ++;
-            Destroy(this.gameObject);
+
+			if (canvas.GetComponent<UI> ()) {
+				canvas.GetComponent<UI> ().score++;
+			}
+
+			Destroy(this.gameObject);
 		}
 	}
 }

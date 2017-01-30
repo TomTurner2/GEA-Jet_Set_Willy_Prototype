@@ -31,7 +31,7 @@ public class ScreenEdgeMethod2 : MonoBehaviour
     void StartLerping()
     {
         _isLerping = true;
-		target_scene_objects = SceneManager.GetSceneByName(target_scene).GetRootGameObjects()[0];
+
 
         _timeStartedLerping = Time.time;
 
@@ -80,6 +80,7 @@ public class ScreenEdgeMethod2 : MonoBehaviour
     {
         if (_isLerping)
         {
+			target_scene_objects = SceneManager.GetSceneByName(target_scene).GetRootGameObjects()[0];
             float timeSinceStarted = Time.time - _timeStartedLerping;
             float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
 
@@ -91,7 +92,9 @@ public class ScreenEdgeMethod2 : MonoBehaviour
             {
                 _isLerping = false;
 				player.SendMessage ("freeze", false);
+
 				SceneManager.UnloadScene(current_scene);
+				SceneManager.SetActiveScene (SceneManager.GetSceneByName (target_scene));
             }
         }
     }
