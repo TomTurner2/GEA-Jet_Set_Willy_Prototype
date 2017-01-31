@@ -25,8 +25,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 173814}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.26, y: 0.93, z: 0}
-  m_LocalScale: {x: 0.66250014, y: 0.85843664, z: 1}
+  m_LocalPosition: {x: 27.15, y: -15.21, z: -1.25}
+  m_LocalScale: {x: 0.99, y: 0.85843664, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -55,13 +55,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb673e90680bc040a0c005bc15f6211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphicObject: {fileID: 0}
-  sprites:
-    jump: {fileID: 0}
-    run: []
-    idle: {fileID: 0}
-    slide: {fileID: 0}
-    hang: {fileID: 0}
+  onColour: {r: 0.11724126, g: 1, b: 0, a: 1}
+  offColour: {r: 0.5441177, g: 1, b: 0.54726166, a: 1}
 --- !u!212 &21225654
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -72,7 +67,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 2100000, guid: 176762139cb6cf44cb3b75bdf5779335, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -86,8 +81,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1713798529
-  m_SortingOrder: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: -17
   m_Sprite: {fileID: 21300004, guid: d556a64797f5fdc49bb6c3aa9686a9b5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

@@ -5,14 +5,16 @@ public class Ladder : MonoBehaviour
 {
     private PlayerControl player = null;
     private SpriteRenderer ladderSprite = null;
-    public GameObject graphicObject = null;
-    public SpriteSet sprites;
+    public Color onColour;
+    public Color offColour;
+
 
     // Use this for initialization
     void Start()
     {
         player = FindObjectOfType<PlayerControl>();
         ladderSprite = GetComponent<SpriteRenderer>();
+        ladderSprite.color = offColour;
     }
 
     // Update is called once per frame
@@ -26,7 +28,7 @@ public class Ladder : MonoBehaviour
         if (col.tag == "Player")
         {
             player.onLadder = true;
-            ladderSprite.color = new Color(0.0f, 1.0f, 0.0f, 1f); // Set to Green
+            ladderSprite.color = onColour; // Set to Green
         }
     }
 
@@ -36,7 +38,7 @@ public class Ladder : MonoBehaviour
         if (col.tag == "Player")
         {
             player.onLadder = false;
-            ladderSprite.color = new Color(1f, 1f, 1f, 1f); // Set to opaque gray
+            ladderSprite.color = offColour; // Set to opaque gray
         }
     }
 }

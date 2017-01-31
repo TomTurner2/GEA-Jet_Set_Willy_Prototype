@@ -179,7 +179,7 @@ public class ClimbingHarness : MonoBehaviour
             {
                  jumpVelocity = new Vector2(-1 * xJumpVelocityMod, 1 * player.getJumpForce());
             }
-            //Vector3 jumpVelocity = new Vector2(climbPositions[currentStartPoint].GetComponent<Rigidbody2D>().velocity.x * xJumpVelocityMod, player.getJumpForce());
+
             playerRB.velocity = jumpVelocity;
             climbing = false;
             climbPositions = null;

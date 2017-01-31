@@ -84,14 +84,12 @@ public class PlayerControl : MonoBehaviour
         right = true;
         notJumpable = ~(notJumpable);
         gravityStore = myRB.gravityScale;
-        
-        if(canvas.GetComponent<UI>())
+
+        if (canvas.GetComponent<UI>())
         {
             canvas.GetComponent<UI>().playerHealth = lives;
         }
-      
-
-    }
+}
 
 
     void FixedUpdate ()
@@ -109,6 +107,7 @@ public class PlayerControl : MonoBehaviour
         return right;
     }
 
+
     void determineDirection()
     {
         if (myRB.velocity.x > DEADZONE)
@@ -120,6 +119,7 @@ public class PlayerControl : MonoBehaviour
             right = false;
         }     
     }
+
 
     public float getJumpForce()
     {
@@ -157,11 +157,8 @@ public class PlayerControl : MonoBehaviour
 
                     if (Input.GetKey("s"))
                     {
-                        if (sameSlide == false)
-                        {
                             myState = PlayerState.SLIDING;
                             myRB.AddForce(new Vector2(slideSpeed, 0));//move player using velocity    
-                        }
                     }
                 }
                 else

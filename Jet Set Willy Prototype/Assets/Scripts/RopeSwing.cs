@@ -34,7 +34,7 @@ public class RopeSwing : MonoBehaviour
         {
             swingRope();
             updateRopeRenderer();
-            updateMaterial();
+            //updateMaterial();
         }
     }
 

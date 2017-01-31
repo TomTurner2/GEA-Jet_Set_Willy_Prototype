@@ -12,7 +12,7 @@ GameObject:
   - 114: {fileID: 11413970}
   - 114: {fileID: 11476130}
   - 61: {fileID: 6136886}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -56,7 +56,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 529ae546b6a376e418f67c483c1e2a92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 6136886}
 --- !u!114 &11476130
 MonoBehaviour:
   m_ObjectHideFlags: 1
