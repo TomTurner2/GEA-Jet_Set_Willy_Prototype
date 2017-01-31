@@ -5,20 +5,29 @@ using UnityEngine.SceneManagement;
 public class InitialLoad : MonoBehaviour
 {
 	public string firstScene;
+    private bool activated = false;
+    public GameObject player;
 
 	// Use this for initialization
 	void Start ()
 	{
         SceneManager.LoadScene(firstScene, LoadSceneMode.Additive);
+        activated = true;
     }
 	
 	// Update is called once per frame
 	void Update ()
 	{
-        if(this)
+        if(activated)
         {
-            GameObject.Find("Player").GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_L").transform;
-            Destroy(this);
+            activated = false;
+            setRespawnPoint();
         }
+    }
+
+    void setRespawnPoint()
+    {
+        player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_R").transform;
+        Destroy(this);
     }
 }

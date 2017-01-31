@@ -228,7 +228,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 881352802}
   - 212: {fileID: 881352801}
-  - 61: {fileID: 881352800}
   - 114: {fileID: 881352799}
   m_Layer: 0
   m_Name: Initial Scene Load
@@ -249,20 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstScene: CurtisSW
---- !u!61 &881352800
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 881352798}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  player: {fileID: 1660620451}
 --- !u!212 &881352801
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -543,3 +529,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1660620451 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 196522, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
+  m_PrefabInternal: {fileID: 470927809}
