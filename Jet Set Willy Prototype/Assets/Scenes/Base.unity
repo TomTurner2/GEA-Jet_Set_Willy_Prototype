@@ -85,6 +85,12 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &412297065 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11471910, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8,
+    type: 2}
+  m_PrefabInternal: {fileID: 470927809}
+  m_Script: {fileID: 11500000, guid: cce6e51b75e593145aea1a4d0fc00d37, type: 3}
 --- !u!1001 &470927809
 Prefab:
   m_ObjectHideFlags: 0
@@ -122,7 +128,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 463456, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
@@ -225,7 +231,7 @@ GameObject:
   - 61: {fileID: 881352800}
   - 114: {fileID: 881352799}
   m_Layer: 0
-  m_Name: New Sprite
+  m_Name: Initial Scene Load
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -451,7 +457,7 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
-  player: {fileID: 0}
+  player: {fileID: 412297065}
   scoreXAlign: 300
   scoreYAlign: 250
   scoreXSize: 200

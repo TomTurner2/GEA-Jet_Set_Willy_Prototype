@@ -354,7 +354,8 @@ public class PlayerControl : MonoBehaviour
 
 	public void collect()
 	{
-		score++;
+		this.score++;
+        canvas.GetComponent<UI>().score = this.score;
 	}
 
 	public void freeze(bool f)

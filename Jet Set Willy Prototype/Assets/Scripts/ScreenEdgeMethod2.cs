@@ -66,6 +66,7 @@ public class ScreenEdgeMethod2 : MonoBehaviour
 			_nextSceneStartPosition = new Vector3(sizeX, 0, 0);
 			break;
         }
+
 		player.SendMessage ("freeze", true);
     }
 
@@ -95,6 +96,21 @@ public class ScreenEdgeMethod2 : MonoBehaviour
 
 				SceneManager.UnloadScene(current_scene);
 				SceneManager.SetActiveScene (SceneManager.GetSceneByName (target_scene));
+                switch (direction)
+                {
+                    case 'l':
+                        player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_R").transform;
+                        break;
+                    case 'r':
+                        player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_L").transform;
+                        break;
+                    case 'u':
+                        player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_D").transform;
+                        break;
+                    case 'd':
+                        player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_U").transform;
+                        break;
+                }
             }
         }
     }
@@ -107,7 +123,6 @@ public class ScreenEdgeMethod2 : MonoBehaviour
 			player = col.gameObject;
             //Scrolls to the next scene, loads in scene from file?
 			SceneManager.LoadScene (target_scene, LoadSceneMode.Additive);
-
 
             StartLerping();
         }
