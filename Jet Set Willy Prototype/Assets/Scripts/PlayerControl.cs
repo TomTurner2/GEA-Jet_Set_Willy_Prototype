@@ -99,12 +99,25 @@ public class PlayerControl : MonoBehaviour
 			handleInput ();
 			executeState ();
 		}
+        detectQuit();
     }
 
 
     public bool getDirection()
     {
         return right;
+    }
+    
+    void detectQuit()
+    {
+        if(Input.GetKeyDown("escape"))
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+        }
     }
 
 
@@ -148,7 +161,7 @@ public class PlayerControl : MonoBehaviour
 
         if (myState != PlayerState.SWINGING && myState != PlayerState.CLIMBINGUP && myState != PlayerState.CLIMBINGDOWN)
         {
-            if (checkGrounded(-Vector3.up))
+            if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
             {
                 if (myRB.velocity.x > 1 || myRB.velocity.x < -1)
                 {
@@ -168,7 +181,7 @@ public class PlayerControl : MonoBehaviour
                     myState = PlayerState.IDLE;//default to idle when grounded
                 }
 
-                if ((Input.GetButton("Jump")) && checkGrounded(-Vector3.up))
+                if ((Input.GetButton("Jump")) && checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
                 {
                     myState = PlayerState.JUMPING;
                     myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
@@ -177,7 +190,7 @@ public class PlayerControl : MonoBehaviour
 
                 myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player using velocity    
             }
-            else if (checkGrounded(Vector3.right))
+            else if (checkGrounded(Vector3.right, 0.15f))
             {
                 myState = PlayerState.HANG;
                 dirRight = true;
@@ -188,7 +201,7 @@ public class PlayerControl : MonoBehaviour
                     flipVelocity = myRB.velocity.x;
                 }
             }
-            else if (checkGrounded(Vector3.left))
+            else if (checkGrounded(Vector3.left, 0.15f))
             {
                 myState = PlayerState.HANG;
                 dirRight = false;
@@ -329,7 +342,7 @@ public class PlayerControl : MonoBehaviour
     /// Will ignore anything on the 'No Jump' layers.
     /// </summary>
     /// <returns>If the player is grounded</returns>
-    private bool checkGrounded(Vector3 dir)
+    private bool checkGrounded(Vector3 dir, float castRadius)
     {
         if (Physics2D.CircleCast(transform.position, myCollider.radius - REDUCE_CAST_RADIUS, dir, myCollider.radius * 0.5f + jumpTolerance, notJumpable))
         {

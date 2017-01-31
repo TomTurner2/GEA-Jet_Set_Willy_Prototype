@@ -17,6 +17,12 @@ public class CameraFollow : MonoBehaviour
 
     }
 
+    public void setTarget(Transform targ)
+    {
+        target = targ;
+        moveToTarget = false;
+    }
+
 
     /// <summary>
     /// Super simple smooth camera follow system. Will move the camera when
