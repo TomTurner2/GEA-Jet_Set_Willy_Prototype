@@ -50,7 +50,9 @@ public class PlayerControl : MonoBehaviour
     public float slideSpeed = 6;
     private bool sameSlide = false;
 	public bool frozen = false;
+    public float lethalFall = 9;
 	private Vector2 storedVelocity;
+    private bool fallingToDeath = false;
 
     [Tooltip("Players movement speed")]
     public float speed = 5.0f;
@@ -163,6 +165,11 @@ public class PlayerControl : MonoBehaviour
         {
             if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
             {
+                if(fallingToDeath)
+                {
+                    kill();
+                }
+
                 if (myRB.velocity.x > 1 || myRB.velocity.x < -1)
                 {
                     myState = PlayerState.RUNNING;
@@ -215,8 +222,13 @@ public class PlayerControl : MonoBehaviour
             else
             {
                 //need a falling state and sprite
-                //myState = PlayerState.JUMPING;
+                myState = PlayerState.JUMPING;
                 myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player using velocity
+
+                if(myRB.velocity.y < -lethalFall)
+                {
+                    fallingToDeath = true;
+                }
             }
         }
         else
@@ -359,6 +371,8 @@ public class PlayerControl : MonoBehaviour
         canvas.GetComponent<UI>().playerHealth = lives;
         transform.position = respawnPoint.position;
 		graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+        fallingToDeath = false;
+        myRB.velocity = Vector2.zero;
 		myState = PlayerState.IDLE;
 	}
 
