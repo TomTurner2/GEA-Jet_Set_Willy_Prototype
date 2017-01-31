@@ -82,6 +82,8 @@ public class ScreenEdgeMethod2 : MonoBehaviour
         if (_isLerping)
         {
 			target_scene_objects = SceneManager.GetSceneByName(target_scene).GetRootGameObjects()[0];
+            current_scene_objects = SceneManager.GetSceneByName(current_scene).GetRootGameObjects()[0];
+
             float timeSinceStarted = Time.time - _timeStartedLerping;
             float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
 
@@ -121,8 +123,9 @@ public class ScreenEdgeMethod2 : MonoBehaviour
 		if (col.gameObject.tag == "Player" && col is CircleCollider2D)
 		{
 			player = col.gameObject;
-            //Scrolls to the next scene, loads in scene from file?
-			SceneManager.LoadScene (target_scene, LoadSceneMode.Additive);
+
+            //Scrolls to the next scene, loads in scene from file
+            SceneManager.LoadScene (target_scene, LoadSceneMode.Additive);
 
             StartLerping();
         }

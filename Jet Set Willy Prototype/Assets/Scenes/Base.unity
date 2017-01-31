@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f7da2c1f699c34386af183e800a7dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstScene: Curtis_Temp_Scene
+  firstScene: CurtisSW
 --- !u!61 &881352800
 BoxCollider2D:
   m_ObjectHideFlags: 0
