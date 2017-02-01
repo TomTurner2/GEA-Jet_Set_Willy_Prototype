@@ -12,7 +12,7 @@ public class InitialLoad : MonoBehaviour
 	void Start ()
 	{
         SceneManager.LoadScene(firstScene, LoadSceneMode.Additive);
-        activated = true;
+        StartCoroutine("waitForLoad");
     }
 	
 	// Update is called once per frame
@@ -29,5 +29,12 @@ public class InitialLoad : MonoBehaviour
     {
         player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_R").transform;
         Destroy(this);
+    }
+
+    IEnumerator waitForLoad()
+    {
+        yield return new WaitForSeconds(2);
+        activated = true;
+
     }
 }

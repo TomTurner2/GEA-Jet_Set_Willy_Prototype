@@ -38,7 +38,7 @@ MonoBehaviour:
     m_Name: 'Items Collected: '
     m_Normal:
       m_Background: {fileID: 0}
-      m_TextColor: {r: 0, g: 0, b: 0, a: 1}
+      m_TextColor: {r: 0, g: 1, b: 0, a: 1}
     m_Hover:
       m_Background: {fileID: 0}
       m_TextColor: {r: 0, g: 0, b: 0, a: 1}
@@ -81,7 +81,7 @@ MonoBehaviour:
       m_Top: 0
       m_Bottom: 0
     m_Font: {fileID: 12800000, guid: f6e71f703a92f2240b93d69080dbba00, type: 3}
-    m_FontSize: 60
+    m_FontSize: 45
     m_FontStyle: 0
     m_Alignment: 0
     m_WordWrap: 0
@@ -153,17 +153,17 @@ MonoBehaviour:
     m_StretchWidth: 1
     m_StretchHeight: 0
   player: {fileID: 0}
-  scoreXAlign: 300
+  scoreXAlign: 150
   scoreYAlign: 250
   scoreXSize: 200
   scoreYSize: 200
   timerX: 0
   timerY: 0
-  heartSpaceX: 5
+  heartSpaceX: 1
   heartSpaceY: 20
   ammoSeparation: 0
-  heartSeparation: 5
-  heartSizeXY: 50
+  heartSeparation: -32
+  heartSizeXY: 25
   ammoSizeXY: 0
 --- !u!114 &11492234
 MonoBehaviour:
