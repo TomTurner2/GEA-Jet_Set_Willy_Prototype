@@ -27,4 +27,13 @@ public class conveyorBelt : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        Rigidbody2D colRB = collision.GetComponent<Rigidbody2D>();
+        if (colRB)
+        {
+            colRB.velocity = Vector2.zero;
+        }
+    }
 }

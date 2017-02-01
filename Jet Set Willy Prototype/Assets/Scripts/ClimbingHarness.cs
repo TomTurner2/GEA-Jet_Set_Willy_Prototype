@@ -50,6 +50,7 @@ public class ClimbingHarness : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (climbing == true && climbPositions != null && canGrab)//if we are in use
         {
             transform.rotation = new Quaternion(0, 0, 0, 0);//prevent rotation

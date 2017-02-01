@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.SceneManagement;
 public enum PlayerState
 {
     IDLE,
@@ -40,11 +40,11 @@ public class PlayerControl : MonoBehaviour
     private GameObject canvas = null;
     private SpriteRenderer graphic = null;
     private Transform graphicTransform = null;
-
+    private Material trailMat;
     private bool right = true;
     bool dirRight = false;//quick fix for hang, will refactor
     private float flipVelocity = 1;
-    //private bool finishedJump = false;
+
 	public int score = 3;
 	public Transform respawnPoint = null;
 	public int lives = 8;
@@ -52,6 +52,8 @@ public class PlayerControl : MonoBehaviour
     private bool sameSlide = false;
 	public bool frozen = false;
     public float lethalFall = 9;
+    public Color trailColour;
+    public Color lethalTrailColour;
 	private Vector2 storedVelocity;
     private bool fallingToDeath = false;
 
@@ -71,6 +73,7 @@ public class PlayerControl : MonoBehaviour
     public bool onLadder = false;
     public float ropeClimbSpeed = 5.0f;
     public float climbVelocity = 5.0f;
+
     private float gravityStore = 0;
     private float movement = 0;
 
@@ -78,6 +81,7 @@ public class PlayerControl : MonoBehaviour
 
     void Start ()
     {
+        trailMat = GetComponent<TrailRenderer>().material;
         canvas = GameObject.Find("Canvas");
         myRB = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<CircleCollider2D>();
@@ -242,33 +246,23 @@ public class PlayerControl : MonoBehaviour
     {
         graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
         graphic.sprite = normal.idle;
-        myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player using velocity    
+
+        myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player on input
+         
         if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
         {
-           
-            if (fallingToDeath)
+
+            if(fallingToDeath)
             {
+                fallingToDeath = false;
                 kill();
             }
 
-            if (movement > 0.5f || movement < -0.5f)
-            {
-                myState = PlayerState.RUNNING;
-                
-            }
-            else
-            {
-                timer = 0;
-                runFrame = 0;
-                myState = PlayerState.IDLE;//default to idle when grounded
-            }
+            checkLethalFall();
 
-            if ((Input.GetButton("Jump")))
-            {
-                myState = PlayerState.JUMPING;
-                myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
-                flipVelocity = myRB.velocity.x;
-            }
+            toRunningTransition();
+            toJumpingTransition();
+
         }
         else
         {
@@ -308,8 +302,9 @@ public class PlayerControl : MonoBehaviour
                 }
 
                 myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player using velocity    
+                myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
 
-                if (Input.GetKey("s"))
+                if (Input.GetKey("s") && sameSlide == false && (myRB.velocity.x >3 || myRB.velocity.x < -3))
                 {
                     myState = PlayerState.SLIDING;
                 }
@@ -325,7 +320,7 @@ public class PlayerControl : MonoBehaviour
         {
             myState = PlayerState.FALLING;
         }
-        myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
+
     }
 
 
@@ -335,14 +330,13 @@ public class PlayerControl : MonoBehaviour
 
         if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
         {
-           
-            graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+            graphicTransform.rotation = new Quaternion(0, 0, 0, 0);//transition back to idle if grounded
             myState = PlayerState.IDLE;
         }
 
         toHangTransition();
 
-        if (right)
+        if (right)//front flip depending on direction
         {
             graphicTransform.Rotate(Vector3.forward, -(flipBaseSpeed * (1 + flipVelocity) * Time.deltaTime), Space.World);
         }
@@ -351,13 +345,11 @@ public class PlayerControl : MonoBehaviour
             graphicTransform.Rotate(Vector3.forward, (flipBaseSpeed * (1 - flipVelocity) * Time.deltaTime), Space.World);
         }
 
-        myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player using velocity
+        myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player with reduced air control
 
-        if (myRB.velocity.y < -lethalFall)
-        {
-            fallingToDeath = true;
-        }
-        myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
+        checkLethalFall();
+
+        myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);//clamp the players x velocity
 
     }
 
@@ -366,6 +358,9 @@ public class PlayerControl : MonoBehaviour
     {
         graphic.sprite = normal.hang;
         graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+
+        checkLethalFall();
+
         if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
         {
             myState = PlayerState.IDLE;
@@ -376,10 +371,17 @@ public class PlayerControl : MonoBehaviour
             myState = PlayerState.FALLING;
         }
 
+        hangToJumpTranstion();
+
+    }
+
+
+    private void hangToJumpTranstion()
+    {
         if (Input.GetButton("Jump"))
         {
             myState = PlayerState.JUMPING;
-            if(dirRight)
+            if (dirRight)
             {
                 myRB.velocity = new Vector2(-wallJumpXForce, jumpForce);//jump player using velocity
             }
@@ -387,20 +389,46 @@ public class PlayerControl : MonoBehaviour
             {
                 myRB.velocity = new Vector2(wallJumpXForce, jumpForce);//jump player using velocity
             }
-           
+
             flipVelocity = myRB.velocity.x;
         }
-
     }
 
 
     private void sliding()
     {
+        graphic.sprite = normal.slide;
+
+       
+
+        if (Input.GetKey("s") && (myRB.velocity.x > DEADZONE || myRB.velocity.x < -DEADZONE))
+        {
+            if (sameSlide == false)
+            {
+                myRB.drag = 1;
+                float oldX = myRB.velocity.x;
+                myRB.velocity = Vector2.zero;
+                myRB.AddForce(new Vector2(oldX * slideSpeed, 0),ForceMode2D.Impulse);
+                sameSlide = true;
+            } 
+        }
+        else
+        {
+            myRB.drag = 0;
+            sameSlide = false;
+            myState = PlayerState.IDLE;
+        }
+
+        if (toJumpingTransition())
+        {
+            myRB.drag = 0;
+            sameSlide = false;
+        }
 
     }
 
 
-    void toHangTransition()
+    private void toHangTransition()
     {
         if (checkGrounded(Vector3.right, 0.2f))
         {
@@ -414,6 +442,35 @@ public class PlayerControl : MonoBehaviour
             myState = PlayerState.HANG;
             dirRight = false;
         }
+    }
+
+
+    private void toRunningTransition()
+    {
+        if (movement > 0.5f || movement < -0.5f)//transition to runnning
+        {
+            myState = PlayerState.RUNNING;
+
+        }
+        else
+        {
+            timer = 0;
+            runFrame = 0;
+            myState = PlayerState.IDLE;//default to idle when grounded
+        }
+    }
+
+    
+    private bool toJumpingTransition()
+    {
+        if ((Input.GetButton("Jump")))
+        {
+            myState = PlayerState.JUMPING;
+            myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
+            flipVelocity = myRB.velocity.x;
+            return true;
+        }
+        return false;
     }
 
 
@@ -435,12 +492,7 @@ public class PlayerControl : MonoBehaviour
             myState = PlayerState.SWINGING;
         }
 
-        if ((Input.GetButtonUp("Jump")))
-        {
-            myState = PlayerState.JUMPING;
-            myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
-            flipVelocity = myRB.velocity.x;
-        }
+        toJumpingTransition();
 
         myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
     }
@@ -448,20 +500,33 @@ public class PlayerControl : MonoBehaviour
 
     private void falling()
     {
-        graphic.sprite = normal.jump; 
+        graphic.sprite = normal.jump;
 
+        checkLethalFall();
         if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
         {
-            if (myRB.velocity.y < -lethalFall)
-            {
-                fallingToDeath = true;
-            }
+           
             myState = PlayerState.IDLE;
         }
 
         toHangTransition();
 
         myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player using velocity
+        myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
+    }
+
+
+    private void checkLethalFall()
+    {
+        if (myRB.velocity.y < -lethalFall)
+        {
+            trailMat.SetColor("_Color", lethalTrailColour);
+            fallingToDeath = true;
+        }
+        else
+        {
+            trailMat.SetColor("_Color", trailColour);
+        }
     }
 
 
@@ -486,6 +551,10 @@ public class PlayerControl : MonoBehaviour
 	{
 		myState = PlayerState.DEAD;
 		lives--;
+        if(lives < 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
         canvas.GetComponent<UI>().playerHealth = lives;
         transform.position = respawnPoint.position;
 		graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
