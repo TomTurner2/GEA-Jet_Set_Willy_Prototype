@@ -30,7 +30,8 @@ public class RopeClimbPoint : MonoBehaviour
         PlayerControl player = collision.GetComponent<PlayerControl>();
         if (harness && player && harness.enabled == true)
         {
-            if ((player.getPlayerState() == PlayerState.JUMPING || player.getPlayerState() == PlayerState.HANG) && harness.getClimbing() == false)
+            if ((player.getPlayerState() == PlayerState.JUMPING || player.getPlayerState() == PlayerState.HANG || player.getPlayerState() == PlayerState.FALLING)
+                && harness.getClimbing() == false)
             {
                 if (harness.getCanGrab() == true)
                 {

@@ -70,6 +70,7 @@ public class ClimbingHarness : MonoBehaviour
             }
         }
         grabDelayTimer();
+        
     }
 
 
@@ -167,7 +168,7 @@ public class ClimbingHarness : MonoBehaviour
     /// </summary>
     private void checkJumpingOff()
     {
-        if (player.getPlayerState() == PlayerState.JUMPING && climbPositions != null)//need a delay on first grab
+        if (player.getPlayerState() == PlayerState.JUMPING && climbPositions != null)
         {
             playerRB.velocity = Vector2.zero;
             Vector2 jumpVelocity;
@@ -216,6 +217,7 @@ public class ClimbingHarness : MonoBehaviour
             }
         }
     }
+
 
 
     /// <summary>

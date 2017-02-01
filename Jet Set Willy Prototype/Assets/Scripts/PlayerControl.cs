@@ -11,7 +11,8 @@ public enum PlayerState
     HANG,
     SWINGING,
     CLIMBINGUP,
-    CLIMBINGDOWN
+    CLIMBINGDOWN,
+    FALLING
 }
 
 [System.Serializable]
@@ -71,6 +72,7 @@ public class PlayerControl : MonoBehaviour
     public float ropeClimbSpeed = 5.0f;
     public float climbVelocity = 5.0f;
     private float gravityStore = 0;
+    private float movement = 0;
 
     public SpriteSet normal;  
 
@@ -85,7 +87,7 @@ public class PlayerControl : MonoBehaviour
         graphic.sprite = normal.idle;
         right = true;
         notJumpable = ~(notJumpable);
-        gravityStore = myRB.gravityScale;
+        gravityStore = myRB.gravityScale;       
 
         if (canvas.GetComponent<UI>())
         {
@@ -104,15 +106,41 @@ public class PlayerControl : MonoBehaviour
         detectQuit();
     }
 
-
+    #region GettersAndSetters
     public bool getDirection()
     {
         return right;
     }
-    
+
+
+    public float getJumpForce()
+    {
+        return jumpForce;
+    }
+
+
+    public PlayerState getPlayerState()
+    {
+        return myState;
+    }
+
+
+    public void setPlayerState(PlayerState state)
+    {
+        myState = state;
+    }
+
+
+    public float getClimbSpeed()
+    {
+        return ropeClimbSpeed;
+    }
+    #endregion
+
+
     void detectQuit()
     {
-        if(Input.GetKeyDown("escape"))
+        if(Input.GetKey(KeyCode.Escape))
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
@@ -136,128 +164,9 @@ public class PlayerControl : MonoBehaviour
     }
 
 
-    public float getJumpForce()
-    {
-        return jumpForce;
-    }
-
-    public PlayerState getPlayerState()
-    {
-        return myState;
-    }
-
-    public void setPlayerState(PlayerState state)
-    {
-        myState = state;
-    }
-
-    public float getClimbSpeed()
-    {
-        return ropeClimbSpeed;
-    }
-
     void handleInput()
     {
-        float movement = Input.GetAxis("Horizontal");
-        determineDirection();
-
-        if (myState != PlayerState.SWINGING && myState != PlayerState.CLIMBINGUP && myState != PlayerState.CLIMBINGDOWN)
-        {
-            if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
-            {
-                if(fallingToDeath)
-                {
-                    kill();
-                }
-
-                if (movement > 0.5f || movement < -0.5f)
-                {
-                    myState = PlayerState.RUNNING;
-                    timer += Time.deltaTime;
-
-                    if (Input.GetKey("s"))
-                    {
-                            myState = PlayerState.SLIDING;
-                            myRB.AddForce(new Vector2(slideSpeed, 0));//move player using velocity    
-                    }
-                }
-                else
-                {
-                    timer = 0;
-                    runFrame = 0;
-                    myState = PlayerState.IDLE;//default to idle when grounded
-                }
-
-                if ((Input.GetButton("Jump")) && checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
-                {
-                    myState = PlayerState.JUMPING;
-                    myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
-                    flipVelocity = myRB.velocity.x;
-                }
-
-                myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player using velocity    
-            }
-            else if (checkGrounded(Vector3.right, 0.2f))
-            {
-                myState = PlayerState.HANG;
-                dirRight = true;
-                if (Input.GetButton("Jump"))
-                {
-                    myState = PlayerState.JUMPING;
-                    myRB.velocity = new Vector2(-wallJumpXForce, jumpForce);//jump player using velocity
-                    flipVelocity = myRB.velocity.x;
-                }
-            }
-            else if (checkGrounded(Vector3.left, 0.2f))
-            {
-                myState = PlayerState.HANG;
-                dirRight = false;
-                if (Input.GetButton("Jump"))
-                {
-                    myState = PlayerState.JUMPING;
-                    myRB.velocity = new Vector2(wallJumpXForce, jumpForce);//jump player using velocity
-                    flipVelocity = myRB.velocity.x;
-                }
-            }
-            else
-            {
-                //need a falling state and sprite
-                myState = PlayerState.JUMPING;
-                myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player using velocity
-
-                if(myRB.velocity.y < -lethalFall)
-                {
-                    fallingToDeath = true;
-                }
-            }
-        }
-        else
-        {
-            
-            if(Input.GetKey("w"))
-            {
-                myState = PlayerState.CLIMBINGUP;
-            }
-            else if(Input.GetKey("s"))
-            {
-                myState = PlayerState.CLIMBINGDOWN;
-            }
-            else
-            {
-                myState = PlayerState.SWINGING;
-            }
-         
-            if (Input.GetButton("Jump"))
-            {
-                myState = PlayerState.JUMPING;
-                myRB.velocity = new Vector2(wallJumpXForce, jumpForce);//jump player using velocity
-                flipVelocity = myRB.velocity.x;
-                
-            }
-        }
-
-        if(myState != PlayerState.SLIDING)
-        myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
+        movement = Input.GetAxis("Horizontal");
 
         if (onLadder)
         {
@@ -269,59 +178,40 @@ public class PlayerControl : MonoBehaviour
         {
             myRB.gravityScale = gravityStore;
         }
-
     }
+
 
     void executeState()
     {
         switch (myState)
         {
-            case PlayerState.IDLE:
-                graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
-                graphic.sprite = normal.idle;
+            case PlayerState.IDLE:  idle();
                 break;
-            case PlayerState.JUMPING:
-                graphic.sprite = normal.jump;
-                if (right)
-                {
-                    graphicTransform.Rotate(Vector3.forward, -(flipBaseSpeed * (1 + flipVelocity) * Time.deltaTime), Space.World);
-                }
-                else
-                {
-                    graphicTransform.Rotate(Vector3.forward, (flipBaseSpeed * (1 - flipVelocity) * Time.deltaTime), Space.World);
-                }
-
+            case PlayerState.JUMPING:   jumping();
                 break;
-            case PlayerState.RUNNING:
-                graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
-                graphic.sprite = normal.run[runFrame];
+            case PlayerState.RUNNING:   running();
                 break;
-            case PlayerState.HANG:
-                graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
-                graphic.sprite = normal.hang;
+            case PlayerState.HANG:  hang();
                 break;
-            case PlayerState.SLIDING:
-                graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
-                graphic.sprite = normal.slide;
+            case PlayerState.SLIDING:   sliding();
                 break;
-            case PlayerState.SWINGING:
-                graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
-                graphic.sprite = normal.hang;
+            case PlayerState.SWINGING:  swinging();
+                break;
+            case PlayerState.CLIMBINGUP:    swinging();
+                break;
+            case PlayerState.CLIMBINGDOWN:  swinging();
+                break;
+            case PlayerState.FALLING:   falling();
                 break;
         }
 
-        if (timer >= runAnimDelay)
-        {
-            if (runFrame < normal.run.Length - 1)
-            {
-                runFrame++;
-            }
-            else
-            {
-                runFrame = 0;
-            }
-            timer = 0;
-        }
+        setSpriteDirection();       
+    }
+
+
+    private void setSpriteDirection()
+    {
+        determineDirection();
 
         if (myState != PlayerState.HANG)
         {
@@ -348,6 +238,233 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    private void idle()
+    {
+        graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+        graphic.sprite = normal.idle;
+        myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player using velocity    
+        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
+        {
+           
+            if (fallingToDeath)
+            {
+                kill();
+            }
+
+            if (movement > 0.5f || movement < -0.5f)
+            {
+                myState = PlayerState.RUNNING;
+                
+            }
+            else
+            {
+                timer = 0;
+                runFrame = 0;
+                myState = PlayerState.IDLE;//default to idle when grounded
+            }
+
+            if ((Input.GetButton("Jump")))
+            {
+                myState = PlayerState.JUMPING;
+                myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
+                flipVelocity = myRB.velocity.x;
+            }
+        }
+        else
+        {
+            myState = PlayerState.FALLING;
+        }
+    }
+
+
+    private void running()
+    {
+        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
+        {
+            if ((Input.GetButton("Jump")))
+            {
+                myState = PlayerState.JUMPING;
+                myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
+                flipVelocity = myRB.velocity.x;
+            }
+
+            if (movement > 0.5f || movement < -0.5f)
+            {
+                timer += Time.deltaTime;
+                graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+                graphic.sprite = normal.run[runFrame];
+
+                if (timer >= runAnimDelay)
+                {
+                    if (runFrame < normal.run.Length - 1)
+                    {
+                        runFrame++;
+                    }
+                    else
+                    {
+                        runFrame = 0;
+                    }
+                    timer = 0;
+                }
+
+                myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player using velocity    
+
+                if (Input.GetKey("s"))
+                {
+                    myState = PlayerState.SLIDING;
+                }
+            }
+            else
+            {
+                timer = 0;
+                runFrame = 0;
+                myState = PlayerState.IDLE;//default to idle when grounded
+            }
+        }
+        else
+        {
+            myState = PlayerState.FALLING;
+        }
+        myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
+    }
+
+
+    private void jumping()
+    {
+        graphic.sprite = normal.jump;
+
+        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
+        {
+           
+            graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+            myState = PlayerState.IDLE;
+        }
+
+        toHangTransition();
+
+        if (right)
+        {
+            graphicTransform.Rotate(Vector3.forward, -(flipBaseSpeed * (1 + flipVelocity) * Time.deltaTime), Space.World);
+        }
+        else
+        {
+            graphicTransform.Rotate(Vector3.forward, (flipBaseSpeed * (1 - flipVelocity) * Time.deltaTime), Space.World);
+        }
+
+        myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player using velocity
+
+        if (myRB.velocity.y < -lethalFall)
+        {
+            fallingToDeath = true;
+        }
+        myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
+
+    }
+
+
+    private void hang()
+    {
+        graphic.sprite = normal.hang;
+        graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
+        {
+            myState = PlayerState.IDLE;
+        }
+
+        if(!checkGrounded(Vector3.right, 0.2f) && !checkGrounded(Vector3.left, 0.2f))
+        {
+            myState = PlayerState.FALLING;
+        }
+
+        if (Input.GetButton("Jump"))
+        {
+            myState = PlayerState.JUMPING;
+            if(dirRight)
+            {
+                myRB.velocity = new Vector2(-wallJumpXForce, jumpForce);//jump player using velocity
+            }
+            else
+            {
+                myRB.velocity = new Vector2(wallJumpXForce, jumpForce);//jump player using velocity
+            }
+           
+            flipVelocity = myRB.velocity.x;
+        }
+
+    }
+
+
+    private void sliding()
+    {
+
+    }
+
+
+    void toHangTransition()
+    {
+        if (checkGrounded(Vector3.right, 0.2f))
+        {
+            graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+            myState = PlayerState.HANG;
+            dirRight = true;
+        }
+        else if (checkGrounded(Vector3.left, 0.2f))
+        {
+            graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+            myState = PlayerState.HANG;
+            dirRight = false;
+        }
+    }
+
+
+    private void swinging()
+    {
+        graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+        graphic.sprite = normal.hang;
+
+        if (Input.GetKey("w"))
+        {
+            myState = PlayerState.CLIMBINGUP;
+        }
+        else if (Input.GetKey("s"))
+        {
+            myState = PlayerState.CLIMBINGDOWN;
+        }
+        else
+        {
+            myState = PlayerState.SWINGING;
+        }
+
+        if ((Input.GetButtonUp("Jump")))
+        {
+            myState = PlayerState.JUMPING;
+            myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
+            flipVelocity = myRB.velocity.x;
+        }
+
+        myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
+    }
+
+
+    private void falling()
+    {
+        graphic.sprite = normal.jump; 
+
+        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
+        {
+            if (myRB.velocity.y < -lethalFall)
+            {
+                fallingToDeath = true;
+            }
+            myState = PlayerState.IDLE;
+        }
+
+        toHangTransition();
+
+        myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player using velocity
+    }
+
+
     /// <summary>
     /// Checks if the player is touching the ground using a Circle cast.
     /// Uses jump tolerance and player height to determine cast length.
@@ -363,6 +480,7 @@ public class PlayerControl : MonoBehaviour
         return false;
     }
 
+
     //A Method to 'kill' the player, handling any values related to player death
     public void kill()
 	{
@@ -376,11 +494,13 @@ public class PlayerControl : MonoBehaviour
 		myState = PlayerState.IDLE;
 	}
 
+
 	public void collect()
 	{
 		this.score++;
         canvas.GetComponent<UI>().score = this.score;
 	}
+
 
 	public void freeze(bool f)
 	{
