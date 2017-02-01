@@ -8,7 +8,7 @@ public class menuSystem : MonoBehaviour
     public CameraFollow cam;
     public Transform mainMenuTarget;
     public Transform controlMenuTarget;
-
+    
 
     private void Start()
     {
@@ -27,9 +27,9 @@ public class menuSystem : MonoBehaviour
     public void quitGame()
     {
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+        UnityEditor.EditorApplication.isPlaying = false;//if in editor exit play mode
 #else
-        Application.Quit();
+        Application.Quit();//if a build quit the application
 #endif
     }
 

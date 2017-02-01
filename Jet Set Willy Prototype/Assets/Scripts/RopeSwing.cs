@@ -126,12 +126,10 @@ public class RopeSwing : MonoBehaviour
     {
         ropeRender.SetVertexCount(ropePoints.Count);
         ropeRender.useWorldSpace = true;
-        int pos = 0;
 
         for(int i = 0; i < ropePoints.Count; i++)
         {
-            ropeRender.SetPosition(pos, ropePoints[i].transform.position);
-            pos++;
+            ropeRender.SetPosition(i, ropePoints[i].transform.position);
         }
         
     }

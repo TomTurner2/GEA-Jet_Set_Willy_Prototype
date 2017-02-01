@@ -822,7 +822,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11473334, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
       propertyPath: swingAngle
-      value: 120
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11473334, guid: 6e8c08416377d3d4b8bc4f4f0339cb02, type: 2}
       propertyPath: ropeLength
@@ -1858,6 +1858,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1155386817}
   offset: {x: 0, y: 0, z: -10}
+  followDistance: 1.2
+  smooth: 1
 --- !u!1001 &2083156893
 Prefab:
   m_ObjectHideFlags: 0
