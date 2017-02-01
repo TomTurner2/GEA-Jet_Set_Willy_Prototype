@@ -5668,6 +5668,11 @@ Prefab:
       propertyPath: respawnPoint
       value: 
       objectReference: {fileID: 455121020}
+    - target: {fileID: 11471910, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
+      propertyPath: normal.swing
+      value: 
+      objectReference: {fileID: 21300014, guid: 3a1e06ee20feee94388fe84c146e7c2d,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
   m_IsPrefabParent: 0

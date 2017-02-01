@@ -23,6 +23,7 @@ public class SpriteSet
     public Sprite idle;
     public Sprite slide;
     public Sprite hang;
+    public Sprite swing;
 }
 
 //will  refactor at some point
@@ -549,7 +550,7 @@ public class PlayerControl : MonoBehaviour
     private void swinging()
     {
         graphicTransform.rotation = Quaternion.identity;
-        graphic.sprite = normal.hang;
+        graphic.sprite = normal.swing;
 
         if (Input.GetKey("w"))
         {
