@@ -28,10 +28,13 @@ public class SpriteSet
 //will  refactor at some point
 public class PlayerControl : MonoBehaviour
 {
+    #region constants
     const float REDUCE_CAST_RADIUS = 0.01f;
     const float DEADZONE = 1.5f;
     const float INPUT_DEADZONE = 0.5f;
+    #endregion
 
+    #region ClassMembers
     public LayerMask notJumpable = 0;
     public LayerMask notHangable = 0;
     private Rigidbody2D myRB = null;
@@ -79,7 +82,9 @@ public class PlayerControl : MonoBehaviour
     private float gravityStore = 0;
     private float movement = 0;
 
-    public SpriteSet normal;  
+    public SpriteSet normal;
+    #endregion
+
 
     void Start ()
     {
@@ -100,7 +105,7 @@ public class PlayerControl : MonoBehaviour
         {
             canvas.GetComponent<UI>().playerHealth = lives;
         }
-}
+    }
 
 
     void FixedUpdate ()
@@ -112,6 +117,7 @@ public class PlayerControl : MonoBehaviour
 		}
         detectQuit();
     }
+
 
     #region GettersAndSetters
     public bool getDirection()
@@ -145,32 +151,9 @@ public class PlayerControl : MonoBehaviour
     #endregion
 
 
-    void detectQuit()
-    {
-        if(Input.GetKey(KeyCode.Escape))
-        {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
-        }
-    }
-
-
-    void determineDirection()
-    {
-        if (myRB.velocity.x > DEADZONE)//flip bool depending on velocity
-        {
-            right = true;
-        }
-        else if (myRB.velocity.x < -DEADZONE)
-        {
-            right = false;
-        }     
-    }
-
-
+    /// <summary>
+    /// Detects the players inputs for use with the state system.
+    /// </summary>
     void handleInput()
     {
         movement = Input.GetAxis("Horizontal");
@@ -178,6 +161,9 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// The State machine.
+    /// </summary>
     void executeState()
     {
         switch (myState)
@@ -201,11 +187,45 @@ public class PlayerControl : MonoBehaviour
             case PlayerState.FALLING:   falling();
                 break;
         }
-
         setSpriteDirection();       
     }
 
 
+    /// <summary>
+    /// Detects quit button.
+    /// </summary>
+    void detectQuit()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+        }
+    }
+
+
+    /// <summary>
+    /// Uses velocity to figure out the direction the player should face.
+    /// </summary>
+    void determineDirection()
+    {
+        if (myRB.velocity.x > DEADZONE)//flip bool depending on velocity
+        {
+            right = true;
+        }
+        else if (myRB.velocity.x < -DEADZONE)
+        {
+            right = false;
+        }
+    }
+
+
+    /// <summary>
+    /// Flips sprite depending on direction.
+    /// </summary>
     private void setSpriteDirection()
     {
         determineDirection();
@@ -250,6 +270,11 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    #region States
+    /// <summary>
+    /// Handles the players Idle state, performing any necessary state transitions based on
+    /// input.
+    /// </summary>
     private void idle()
     {
         graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
@@ -276,6 +301,9 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Handles the running state, will move the player depending on input.
+    /// </summary>
     private void running()
     {
         if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))
@@ -310,6 +338,9 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Handles the switching of the run sprites to give running an animation.
+    /// </summary>
     private void runAnimation()
     {
         timer += Time.deltaTime;
@@ -328,6 +359,10 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Handles the jumping state of the player. Will spin player in direction
+    /// of jump.
+    /// </summary>
     private void jumping()
     {
         graphic.sprite = normal.jump;
@@ -358,6 +393,9 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Handles the hanging on walls state.
+    /// </summary>
     private void hang()
     {
         graphic.sprite = normal.hang;
@@ -379,6 +417,9 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Manages the transition from hanging to jumping.
+    /// </summary>
     private void hangToJumpTranstion()
     {
         if (Input.GetButton("Jump"))
@@ -398,6 +439,10 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Handles player sliding. Will add drag to the player to simulate friction
+    /// on the floor.
+    /// </summary>
     private void sliding()
     {
         graphic.sprite = normal.slide;
@@ -431,6 +476,9 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Manages a generic transition to the hang state
+    /// </summary>
     private void toHangTransition()
     {
         if (checkGrounded(Vector3.right, 0.2f, notHangable))
@@ -448,6 +496,9 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// manages a generic transition to the running state.
+    /// </summary>
     private void toRunningTransition()
     {
         if (movement > 0.5f || movement < -0.5f)//transition to runnning
@@ -464,6 +515,10 @@ public class PlayerControl : MonoBehaviour
     }
 
     
+    /// <summary>
+    /// manages generic transition to the jump state.
+    /// </summary>
+    /// <returns></returns>
     private bool toJumpingTransition()
     {
         if ((Input.GetButton("Jump")))
@@ -477,6 +532,9 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// handles the transition to the slide state.
+    /// </summary>
     private void toSlideTransition()
     {
         if (Input.GetKey("s") && sameSlide == false && (myRB.velocity.x > 3 || myRB.velocity.x < -3))
@@ -486,6 +544,10 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Handles the climbing state when attached to rope.
+    /// This state can only be transitioned too when colliding with a rope.
+    /// </summary>
     private void swinging()
     {
         graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
@@ -510,6 +572,9 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Handles the fall state.
+    /// </summary>
     private void falling()
     {
         graphic.sprite = normal.run[0];
@@ -526,8 +591,12 @@ public class PlayerControl : MonoBehaviour
         myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player using velocity
         myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
     }
+    #endregion
 
 
+    /// <summary>
+    /// Determines if the current y velocity is lethal to the player.
+    /// </summary>
     private void checkLethalFall()
     {
         if (myRB.velocity.y < -lethalFall)
@@ -545,7 +614,7 @@ public class PlayerControl : MonoBehaviour
     /// <summary>
     /// Checks if the player is touching the ground using a Circle cast.
     /// Uses jump tolerance and player height to determine cast length.
-    /// Will ignore anything on the 'No Jump' layers.
+    /// Will ignore anything on the provided layer.
     /// </summary>
     /// <returns>If the player is grounded</returns>
     private bool checkGrounded(Vector3 dir, float castRadius, LayerMask layer)
