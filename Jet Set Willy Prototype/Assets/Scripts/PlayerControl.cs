@@ -400,6 +400,7 @@ public class PlayerControl : MonoBehaviour
         graphic.sprite = normal.hang;
         graphicTransform.rotation = Quaternion.identity;
 
+        checkLethalFall();
         if (grounded)
         {
             myState = PlayerState.IDLE;
@@ -410,7 +411,7 @@ public class PlayerControl : MonoBehaviour
             myState = PlayerState.FALLING;
         }
 
-        checkLethalFall();
+       
         hangToJumpTranstion();
     }
 
@@ -596,6 +597,7 @@ public class PlayerControl : MonoBehaviour
     /// </summary>
     private void checkLethalFall()
     {
+       
         if (myRB.velocity.y < -lethalFall)
         {
             trailMat.SetColor("_Color", lethalTrailColour);
@@ -604,6 +606,7 @@ public class PlayerControl : MonoBehaviour
         else
         {
             trailMat.SetColor("_Color", trailColour);
+            fallingToDeath = false;
         }
     }
 
