@@ -29,7 +29,7 @@ GameObject:
   - 58: {fileID: 5817990}
   - 61: {fileID: 6187608}
   - 114: {fileID: 11473286}
-  - 96: {fileID: 9653550}
+  - 96: {fileID: 9601848}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -107,7 +107,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0.09}
   serializedVersion: 2
   m_Size: {x: 0.54, y: 0.57}
---- !u!96 &9653550
+--- !u!96 &9601848
 TrailRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -168,6 +168,9 @@ MonoBehaviour:
   notJumpable:
     serializedVersion: 2
     m_Bits: 256
+  notHangable:
+    serializedVersion: 2
+    m_Bits: 1280
   graphicObject: {fileID: 192522}
   score: 0
   respawnPoint: {fileID: 0}
