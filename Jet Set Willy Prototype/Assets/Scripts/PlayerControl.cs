@@ -78,7 +78,7 @@ public class PlayerControl : MonoBehaviour
     public bool onLadder = false;
     public float ropeClimbSpeed = 5.0f;
     public float climbVelocity = 5.0f;
-
+    public Transform particle;
     private float gravityStore = 0;
     private float movement = 0;
 
@@ -192,17 +192,13 @@ public class PlayerControl : MonoBehaviour
 
 
     /// <summary>
-    /// Detects quit button.
+    /// Detects quit button, will reload scene.
     /// </summary>
     void detectQuit()
     {
         if (Input.GetKey(KeyCode.Escape))
         {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
@@ -277,7 +273,7 @@ public class PlayerControl : MonoBehaviour
     /// </summary>
     private void idle()
     {
-        graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+        graphicTransform.rotation = Quaternion.identity;
         graphic.sprite = normal.idle;
 
         myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player on input
@@ -313,7 +309,7 @@ public class PlayerControl : MonoBehaviour
             if (movement > INPUT_DEADZONE || movement < -INPUT_DEADZONE)//if intending to move
             {
                
-                graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+                graphicTransform.rotation = Quaternion.identity;
                 graphic.sprite = normal.run[runFrame];
 
                 runAnimation();
@@ -369,7 +365,7 @@ public class PlayerControl : MonoBehaviour
 
         if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))
         {
-            graphicTransform.rotation = new Quaternion(0, 0, 0, 0);//transition back to idle if grounded
+            graphicTransform.rotation = Quaternion.identity;//transition back to idle if grounded
             myState = PlayerState.IDLE;
         }
 
@@ -399,9 +395,7 @@ public class PlayerControl : MonoBehaviour
     private void hang()
     {
         graphic.sprite = normal.hang;
-        graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
-
-        checkLethalFall();
+        graphicTransform.rotation = Quaternion.identity;
 
         if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notHangable))
         {
@@ -413,6 +407,7 @@ public class PlayerControl : MonoBehaviour
             myState = PlayerState.FALLING;
         }
 
+        checkLethalFall();
         hangToJumpTranstion();
     }
 
@@ -483,13 +478,13 @@ public class PlayerControl : MonoBehaviour
     {
         if (checkGrounded(Vector3.right, 0.2f, notHangable))
         {
-            graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+            graphicTransform.rotation = Quaternion.identity;
             myState = PlayerState.HANG;
             dirRight = true;
         }
         else if (checkGrounded(Vector3.left, 0.2f, notHangable))
         {
-            graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+            graphicTransform.rotation = Quaternion.identity;
             myState = PlayerState.HANG;
             dirRight = false;
         }
@@ -550,7 +545,7 @@ public class PlayerControl : MonoBehaviour
     /// </summary>
     private void swinging()
     {
-        graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+        graphicTransform.rotation = Quaternion.identity;
         graphic.sprite = normal.hang;
 
         if (Input.GetKey("w"))
@@ -631,6 +626,7 @@ public class PlayerControl : MonoBehaviour
     public void kill()
 	{
         trailMat.SetColor("_Color", trailColour);
+        Transform clone = Instantiate(particle, transform.position, Quaternion.identity) as Transform;
         myState = PlayerState.DEAD;
 		lives--;
         if(lives < 0)
@@ -639,7 +635,7 @@ public class PlayerControl : MonoBehaviour
         }
         canvas.GetComponent<UI>().playerHealth = lives;
         transform.position = respawnPoint.position;
-		graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
+		graphicTransform.rotation =  Quaternion.identity;
         fallingToDeath = false;
         myRB.velocity = Vector2.zero;
 		myState = PlayerState.IDLE;
