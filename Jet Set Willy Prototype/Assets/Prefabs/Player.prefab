@@ -191,6 +191,7 @@ MonoBehaviour:
   onLadder: 0
   ropeClimbSpeed: 5
   climbVelocity: 5
+  particle: {fileID: 414284, guid: b8cf988fd83d77045b14637cb707d832, type: 2}
   normal:
     jump: {fileID: 21300010, guid: 3a1e06ee20feee94388fe84c146e7c2d, type: 3}
     run:

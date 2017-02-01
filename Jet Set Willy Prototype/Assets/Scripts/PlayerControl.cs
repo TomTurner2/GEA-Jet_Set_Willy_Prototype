@@ -81,7 +81,9 @@ public class PlayerControl : MonoBehaviour
     public Transform particle;
     private float gravityStore = 0;
     private float movement = 0;
-
+    private bool hangLeft = false;
+    private bool hangRight = false;
+    private bool grounded = false;
     public SpriteSet normal;
     #endregion
 
@@ -157,6 +159,9 @@ public class PlayerControl : MonoBehaviour
     void handleInput()
     {
         movement = Input.GetAxis("Horizontal");
+        grounded = checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable);
+        hangRight = checkGrounded(Vector3.right, 0.2f, notHangable);
+        hangLeft = checkGrounded(Vector3.left, 0.2f, notHangable);
         handleLadder();
     }
 
@@ -277,8 +282,8 @@ public class PlayerControl : MonoBehaviour
         graphic.sprite = normal.idle;
 
         myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player on input
-         
-        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))//if we're on the floor
+        checkLethalFall();
+        if (grounded)//if we're on the floor
         {
 
             if(fallingToDeath)//if we hit the floor at a lethal speed we die
@@ -302,7 +307,7 @@ public class PlayerControl : MonoBehaviour
     /// </summary>
     private void running()
     {
-        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))
+        if (grounded)
         {
             toJumpingTransition();
 
@@ -363,7 +368,8 @@ public class PlayerControl : MonoBehaviour
     {
         graphic.sprite = normal.jump;
 
-        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))
+        checkLethalFall();
+        if (grounded)
         {
             graphicTransform.rotation = Quaternion.identity;//transition back to idle if grounded
             myState = PlayerState.IDLE;
@@ -381,9 +387,6 @@ public class PlayerControl : MonoBehaviour
         }
 
         myRB.velocity += new Vector2(movement * (speed * 0.05f), 0);//move player with reduced air control
-
-        checkLethalFall();
-
         myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);//clamp the players x velocity
 
     }
@@ -397,12 +400,12 @@ public class PlayerControl : MonoBehaviour
         graphic.sprite = normal.hang;
         graphicTransform.rotation = Quaternion.identity;
 
-        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notHangable))
+        if (grounded)
         {
             myState = PlayerState.IDLE;
         }
 
-        if(!checkGrounded(Vector3.right, 0.2f, notHangable) && !checkGrounded(Vector3.left, 0.2f, notHangable))
+        if(!hangRight && !hangLeft)
         {
             myState = PlayerState.FALLING;
         }
@@ -441,8 +444,7 @@ public class PlayerControl : MonoBehaviour
     private void sliding()
     {
         graphic.sprite = normal.slide;
-        if (Input.GetKey("s") && (myRB.velocity.x > DEADZONE || myRB.velocity.x < -DEADZONE) &&
-            checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))//if i still intend to slide and I haven't slowed to a stop
+        if (Input.GetKey("s") && (myRB.velocity.x > DEADZONE || myRB.velocity.x < -DEADZONE) &&  grounded)//if i still intend to slide and I haven't slowed to a stop
         {
             if (sameSlide == false)
             {
@@ -476,13 +478,13 @@ public class PlayerControl : MonoBehaviour
     /// </summary>
     private void toHangTransition()
     {
-        if (checkGrounded(Vector3.right, 0.2f, notHangable))
+        if (hangRight)
         {
             graphicTransform.rotation = Quaternion.identity;
             myState = PlayerState.HANG;
             dirRight = true;
         }
-        else if (checkGrounded(Vector3.left, 0.2f, notHangable))
+        else if (hangLeft)
         {
             graphicTransform.rotation = Quaternion.identity;
             myState = PlayerState.HANG;
@@ -575,7 +577,7 @@ public class PlayerControl : MonoBehaviour
         graphic.sprite = normal.run[0];
 
         checkLethalFall();
-        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))
+        if (grounded)
         {
            
             myState = PlayerState.IDLE;
@@ -627,6 +629,7 @@ public class PlayerControl : MonoBehaviour
 	{
         trailMat.SetColor("_Color", trailColour);
         Transform clone = Instantiate(particle, transform.position, Quaternion.identity) as Transform;
+        Destroy(clone.gameObject, 2);
         myState = PlayerState.DEAD;
 		lives--;
         if(lives < 0)
