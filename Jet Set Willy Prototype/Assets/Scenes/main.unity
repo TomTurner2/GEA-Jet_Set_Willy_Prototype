@@ -5668,6 +5668,10 @@ Prefab:
       propertyPath: respawnPoint
       value: 
       objectReference: {fileID: 455121020}
+    - target: {fileID: 11471910, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
+      propertyPath: lethalFall
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: afb6a2dc25e2dd34a9047ac1fcf6e1d8, type: 2}
   m_IsPrefabParent: 0
@@ -9452,11 +9456,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 402878, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -8.43
+      value: -7.39
       objectReference: {fileID: 0}
     - target: {fileID: 402878, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -17.23
+      value: -17.38
       objectReference: {fileID: 0}
     - target: {fileID: 402878, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
       propertyPath: m_LocalPosition.z
@@ -12510,11 +12514,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 402878, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -7.43
+      value: -6.39
       objectReference: {fileID: 0}
     - target: {fileID: 402878, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -17.23
+      value: -17.38
       objectReference: {fileID: 0}
     - target: {fileID: 402878, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
       propertyPath: m_LocalPosition.z
@@ -15156,11 +15160,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 402878, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -7.93
+      value: -6.89
       objectReference: {fileID: 0}
     - target: {fileID: 402878, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -17.23
+      value: -17.38
       objectReference: {fileID: 0}
     - target: {fileID: 402878, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
       propertyPath: m_LocalPosition.z

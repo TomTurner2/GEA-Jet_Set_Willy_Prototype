@@ -512,7 +512,7 @@ public class PlayerControl : MonoBehaviour
 
     private void falling()
     {
-        graphic.sprite = normal.jump;
+        graphic.sprite = normal.run[0];
 
         checkLethalFall();
         if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))
@@ -561,7 +561,8 @@ public class PlayerControl : MonoBehaviour
     //A Method to 'kill' the player, handling any values related to player death
     public void kill()
 	{
-		myState = PlayerState.DEAD;
+        trailMat.SetColor("_Color", trailColour);
+        myState = PlayerState.DEAD;
 		lives--;
         if(lives < 0)
         {

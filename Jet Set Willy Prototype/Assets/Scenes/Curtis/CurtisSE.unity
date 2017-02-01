@@ -140,6 +140,14 @@ Prefab:
       propertyPath: m_Name
       value: Stairs (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 178272, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 107188, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
   m_IsPrefabParent: 0
@@ -255,6 +263,56 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 417922, guid: 83a6251908a32a54f85adb4fc7d7abdb, type: 2}
   m_PrefabInternal: {fileID: 270044344}
+--- !u!1001 &324406380
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1902588561}
+    m_Modifications:
+    - target: {fileID: 415912, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -1.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 415912, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 3.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 415912, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 415912, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 415912, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 415912, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 415912, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 415912, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+      propertyPath: m_RootOrder
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 116556, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+      propertyPath: m_Name
+      value: Respawn_Point_U
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+  m_IsPrefabParent: 0
+--- !u!4 &324406381 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 415912, guid: ec7c3e8475fe481489eaac0653674cae, type: 2}
+  m_PrefabInternal: {fileID: 324406380}
 --- !u!1001 &391454472
 Prefab:
   m_ObjectHideFlags: 0
@@ -505,6 +563,14 @@ Prefab:
     - target: {fileID: 107188, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
       propertyPath: m_Name
       value: Stairs (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 178272, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 107188, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
@@ -930,6 +996,10 @@ Prefab:
       propertyPath: m_LocalScale.y
       value: 0.421556
       objectReference: {fileID: 0}
+    - target: {fileID: 145696, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
   m_IsPrefabParent: 0
@@ -1061,6 +1131,7 @@ Transform:
   - {fileID: 2067209905}
   - {fileID: 12587334}
   - {fileID: 1598298959}
+  - {fileID: 324406381}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!1001 &2015064231
@@ -1117,6 +1188,14 @@ Prefab:
     - target: {fileID: 107188, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
       propertyPath: m_Name
       value: Stairs (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 178272, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 107188, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
@@ -1176,6 +1255,14 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 178272, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 107188, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f1aa2ca15d280004ea3654a41bce3cd5, type: 2}
   m_IsPrefabParent: 0
@@ -1229,6 +1316,10 @@ Prefab:
     - target: {fileID: 402878, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
       propertyPath: m_LocalScale.x
       value: 2.0623786
+      objectReference: {fileID: 0}
+    - target: {fileID: 145696, guid: a1bb0dac46cc102449be83561f76c436, type: 2}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a1bb0dac46cc102449be83561f76c436, type: 2}

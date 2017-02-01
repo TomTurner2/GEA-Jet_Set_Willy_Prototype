@@ -102,12 +102,15 @@ public class ScreenEdgeMethod2 : MonoBehaviour
                 {
                     case 'l':
                         player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_R").transform;
+
                         break;
                     case 'r':
-                        player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_L").transform;
+ 
+                       player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_L").transform;
                         break;
                     case 'u':
-                        player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_D").transform;
+
+                       player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_D").transform;
                         break;
                     case 'd':
                         player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find("Respawn_Point_U").transform;
@@ -117,6 +120,12 @@ public class ScreenEdgeMethod2 : MonoBehaviour
         }
     }
 
+
+    IEnumerator setSpawn(string level)
+    {
+        yield return new WaitForSeconds(5);
+        player.GetComponent<PlayerControl>().respawnPoint = GameObject.Find(level).transform;
+    }
 
     void OnTriggerEnter2D(Collider2D col)
     {
