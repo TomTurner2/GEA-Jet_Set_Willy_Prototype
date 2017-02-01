@@ -170,7 +170,7 @@ public class PlayerControl : MonoBehaviour
                     kill();
                 }
 
-                if (myRB.velocity.x > 1 || myRB.velocity.x < -1)
+                if (movement > 0.5f || movement < -0.5f)
                 {
                     myState = PlayerState.RUNNING;
                     timer += Time.deltaTime;
@@ -197,7 +197,7 @@ public class PlayerControl : MonoBehaviour
 
                 myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player using velocity    
             }
-            else if (checkGrounded(Vector3.right, 0.15f))
+            else if (checkGrounded(Vector3.right, 0.2f))
             {
                 myState = PlayerState.HANG;
                 dirRight = true;
@@ -208,7 +208,7 @@ public class PlayerControl : MonoBehaviour
                     flipVelocity = myRB.velocity.x;
                 }
             }
-            else if (checkGrounded(Vector3.left, 0.15f))
+            else if (checkGrounded(Vector3.left, 0.2f))
             {
                 myState = PlayerState.HANG;
                 dirRight = false;
