@@ -29,6 +29,7 @@ GameObject:
   - 58: {fileID: 5817990}
   - 61: {fileID: 6187608}
   - 114: {fileID: 11473286}
+  - 96: {fileID: 9653550}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -106,6 +107,53 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0.09}
   serializedVersion: 2
   m_Size: {x: 0.54, y: 0.57}
+--- !u!96 &9653550
+TrailRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 196522}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_Materials:
+  - {fileID: 2100000, guid: e34860f1372dcc94ab36d505669b0f08, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_ReflectionProbeUsage: 1
+  m_ProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Time: 0.5
+  m_StartWidth: 0.3
+  m_EndWidth: 0.01
+  m_Colors:
+    m_Color[0]:
+      serializedVersion: 2
+      rgba: 4278255360
+    m_Color[1]:
+      serializedVersion: 2
+      rgba: 4278255360
+    m_Color[2]:
+      serializedVersion: 2
+      rgba: 4278255360
+    m_Color[3]:
+      serializedVersion: 2
+      rgba: 4278255360
+    m_Color[4]:
+      serializedVersion: 2
+      rgba: 4278255360
+  m_MinVertexDistance: 0.1
+  m_Autodestruct: 0
 --- !u!114 &11471910
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -124,9 +172,11 @@ MonoBehaviour:
   score: 0
   respawnPoint: {fileID: 0}
   lives: 8
-  slideSpeed: 6
+  slideSpeed: 1.6
   frozen: 0
   lethalFall: 9
+  trailColour: {r: 0.2827586, g: 1, b: 0, a: 0.15686275}
+  lethalTrailColour: {r: 1, g: 0, b: 0, a: 0.15686275}
   speed: 5
   maxSpeed: 5
   climbSpeed: 6

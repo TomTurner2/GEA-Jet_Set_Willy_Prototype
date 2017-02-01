@@ -30,8 +30,10 @@ public class PlayerControl : MonoBehaviour
 {
     const float REDUCE_CAST_RADIUS = 0.01f;
     const float DEADZONE = 1.5f;
+    const float INPUT_DEADZONE = 0.5f;
 
     public LayerMask notJumpable = 0;
+    public LayerMask notHangable = 0;
     private Rigidbody2D myRB = null;
     private CircleCollider2D myCollider = null;
     private PlayerState myState = PlayerState.IDLE;
@@ -90,7 +92,8 @@ public class PlayerControl : MonoBehaviour
         graphic = graphicObject.GetComponent<SpriteRenderer>();
         graphic.sprite = normal.idle;
         right = true;
-        notJumpable = ~(notJumpable);
+        notJumpable = ~(notJumpable);//invert layer masks
+        notHangable = ~(notHangable);
         gravityStore = myRB.gravityScale;       
 
         if (canvas.GetComponent<UI>())
@@ -157,7 +160,7 @@ public class PlayerControl : MonoBehaviour
 
     void determineDirection()
     {
-        if (myRB.velocity.x > DEADZONE)
+        if (myRB.velocity.x > DEADZONE)//flip bool depending on velocity
         {
             right = true;
         }
@@ -171,17 +174,7 @@ public class PlayerControl : MonoBehaviour
     void handleInput()
     {
         movement = Input.GetAxis("Horizontal");
-
-        if (onLadder)
-        {
-            myRB.gravityScale = 0;
-            climbVelocity = climbSpeed * Input.GetAxisRaw("Vertical");
-            myRB.velocity = new Vector2(myRB.velocity.x, climbVelocity);
-        }
-        else if (!onLadder)
-        {
-            myRB.gravityScale = gravityStore;
-        }
+        handleLadder();
     }
 
 
@@ -242,6 +235,21 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    private void handleLadder()
+    {
+        if (onLadder)
+        {
+            myRB.gravityScale = 0;
+            climbVelocity = climbSpeed * Input.GetAxisRaw("Vertical");
+            myRB.velocity = new Vector2(myRB.velocity.x, climbVelocity);
+        }
+        else if (!onLadder)
+        {
+            myRB.gravityScale = gravityStore;
+        }
+    }
+
+
     private void idle()
     {
         graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
@@ -249,65 +257,43 @@ public class PlayerControl : MonoBehaviour
 
         myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player on input
          
-        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
+        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))//if we're on the floor
         {
 
-            if(fallingToDeath)
+            if(fallingToDeath)//if we hit the floor at a lethal speed we die
             {
                 fallingToDeath = false;
                 kill();
             }
 
-            checkLethalFall();
-
-            toRunningTransition();
+            toRunningTransition();//check transitions to other states
             toJumpingTransition();
-
         }
         else
         {
-            myState = PlayerState.FALLING;
+            myState = PlayerState.FALLING;//if not on the floor we are falling
         }
     }
 
 
     private void running()
     {
-        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
+        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))
         {
-            if ((Input.GetButton("Jump")))
-            {
-                myState = PlayerState.JUMPING;
-                myRB.velocity = new Vector2(myRB.velocity.x, jumpForce);//jump player using velocity
-                flipVelocity = myRB.velocity.x;
-            }
+            toJumpingTransition();
 
-            if (movement > 0.5f || movement < -0.5f)
+            if (movement > INPUT_DEADZONE || movement < -INPUT_DEADZONE)//if intending to move
             {
-                timer += Time.deltaTime;
+               
                 graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
                 graphic.sprite = normal.run[runFrame];
 
-                if (timer >= runAnimDelay)
-                {
-                    if (runFrame < normal.run.Length - 1)
-                    {
-                        runFrame++;
-                    }
-                    else
-                    {
-                        runFrame = 0;
-                    }
-                    timer = 0;
-                }
+                runAnimation();
 
                 myRB.velocity = new Vector2(movement * speed, myRB.velocity.y);//move player using velocity    
-                myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);
+                myRB.velocity = new Vector2(Mathf.Clamp(myRB.velocity.x, -maxSpeed, maxSpeed), myRB.velocity.y);//clamp max speed
 
-                if (Input.GetKey("s") && sameSlide == false && (myRB.velocity.x >3 || myRB.velocity.x < -3))
-                {
-                    myState = PlayerState.SLIDING;
-                }
+                toSlideTransition();
             }
             else
             {
@@ -324,11 +310,29 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    private void runAnimation()
+    {
+        timer += Time.deltaTime;
+        if (timer >= runAnimDelay)//play the run animation
+        {
+            if (runFrame < normal.run.Length - 1)
+            {
+                runFrame++;
+            }
+            else
+            {
+                runFrame = 0;
+            }
+            timer = 0;
+        }
+    }
+
+
     private void jumping()
     {
         graphic.sprite = normal.jump;
 
-        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
+        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))
         {
             graphicTransform.rotation = new Quaternion(0, 0, 0, 0);//transition back to idle if grounded
             myState = PlayerState.IDLE;
@@ -361,18 +365,17 @@ public class PlayerControl : MonoBehaviour
 
         checkLethalFall();
 
-        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
+        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notHangable))
         {
             myState = PlayerState.IDLE;
         }
 
-        if(!checkGrounded(Vector3.right, 0.2f) && !checkGrounded(Vector3.left, 0.2f))
+        if(!checkGrounded(Vector3.right, 0.2f, notHangable) && !checkGrounded(Vector3.left, 0.2f, notHangable))
         {
             myState = PlayerState.FALLING;
         }
 
         hangToJumpTranstion();
-
     }
 
 
@@ -398,45 +401,45 @@ public class PlayerControl : MonoBehaviour
     private void sliding()
     {
         graphic.sprite = normal.slide;
-
-       
-
-        if (Input.GetKey("s") && (myRB.velocity.x > DEADZONE || myRB.velocity.x < -DEADZONE))
+        if (Input.GetKey("s") && (myRB.velocity.x > DEADZONE || myRB.velocity.x < -DEADZONE) &&
+            checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))//if i still intend to slide and I haven't slowed to a stop
         {
             if (sameSlide == false)
             {
+                topCollider.enabled = false;
                 myRB.drag = 1;
                 float oldX = myRB.velocity.x;
                 myRB.velocity = Vector2.zero;
-                myRB.AddForce(new Vector2(oldX * slideSpeed, 0),ForceMode2D.Impulse);
+                myRB.AddForce(new Vector2(oldX * slideSpeed, 0),ForceMode2D.Impulse);//add the slide force if not already sliding
                 sameSlide = true;
             } 
         }
         else
         {
             myRB.drag = 0;
+            topCollider.enabled = true;
             sameSlide = false;
-            myState = PlayerState.IDLE;
+            myState = PlayerState.IDLE;//otherwise cancel the slide
         }
 
-        if (toJumpingTransition())
+        if (toJumpingTransition())//if jumping reset slide
         {
             myRB.drag = 0;
+            topCollider.enabled = true;
             sameSlide = false;
         }
-
     }
 
 
     private void toHangTransition()
     {
-        if (checkGrounded(Vector3.right, 0.2f))
+        if (checkGrounded(Vector3.right, 0.2f, notHangable))
         {
             graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
             myState = PlayerState.HANG;
             dirRight = true;
         }
-        else if (checkGrounded(Vector3.left, 0.2f))
+        else if (checkGrounded(Vector3.left, 0.2f, notHangable))
         {
             graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
             myState = PlayerState.HANG;
@@ -474,6 +477,15 @@ public class PlayerControl : MonoBehaviour
     }
 
 
+    private void toSlideTransition()
+    {
+        if (Input.GetKey("s") && sameSlide == false && (myRB.velocity.x > 3 || myRB.velocity.x < -3))
+        {
+            myState = PlayerState.SLIDING;
+        }
+    }
+
+
     private void swinging()
     {
         graphicTransform.rotation = new Quaternion(0, 0, 0, 0);
@@ -503,7 +515,7 @@ public class PlayerControl : MonoBehaviour
         graphic.sprite = normal.jump;
 
         checkLethalFall();
-        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS))
+        if (checkGrounded(-Vector3.up, myCollider.radius - REDUCE_CAST_RADIUS, notJumpable))
         {
            
             myState = PlayerState.IDLE;
@@ -536,9 +548,9 @@ public class PlayerControl : MonoBehaviour
     /// Will ignore anything on the 'No Jump' layers.
     /// </summary>
     /// <returns>If the player is grounded</returns>
-    private bool checkGrounded(Vector3 dir, float castRadius)
+    private bool checkGrounded(Vector3 dir, float castRadius, LayerMask layer)
     {
-        if (Physics2D.CircleCast(transform.position, myCollider.radius - REDUCE_CAST_RADIUS, dir, myCollider.radius * 0.5f + jumpTolerance, notJumpable))
+        if (Physics2D.CircleCast(transform.position, myCollider.radius - REDUCE_CAST_RADIUS, dir, myCollider.radius * 0.5f + jumpTolerance, layer))
         {
             return true;
         }
