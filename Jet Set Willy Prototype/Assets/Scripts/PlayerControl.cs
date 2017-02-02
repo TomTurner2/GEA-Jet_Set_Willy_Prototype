@@ -401,6 +401,7 @@ public class PlayerControl : MonoBehaviour
         graphic.sprite = normal.hang;
         graphicTransform.rotation = Quaternion.identity;
 
+        fallingToDeath = false;
         checkLethalFall();
         if (grounded)
         {
@@ -607,7 +608,7 @@ public class PlayerControl : MonoBehaviour
         else
         {
             trailMat.SetColor("_Color", trailColour);
-            fallingToDeath = false;
+            //fallingToDeath = false;
         }
     }
 
